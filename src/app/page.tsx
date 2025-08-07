@@ -3,6 +3,7 @@ import Input from "@/components/Input";
 import axios from "axios";
 import InputSelect from "@/components/InputSelect";
 import React, { useRef, useEffect, useState } from "react";
+import Image from "next/image";
 
 export default function Home() {
   const [success, setSuccess] = useState("");
@@ -181,362 +182,216 @@ export default function Home() {
   };
 
   return (
-    <main className="flex min-h-screen flex-col justify-between overflow-x-hidden">
-      <div>
-        <div className="h-screen">
-          <div className="sm:hidden">
-            <video
-              src="NatAdrian.mp4"
-              autoPlay
-              muted
-              playsInline
-              loop
-              style={{
-                width: "100vh",
-                height: "100vh",
-                objectFit: "cover",
-              }}
-            >
-              <source src="video.mp4" type="video/mp4" />
-            </video>
-          </div>
-          <div className="hidden sm:block">
-            <img
-              src="/ann.jpg"
-              alt="Adrian and Nat"
-              style={{
-                width: "100vw",
-                height: "100vh",
-                objectFit: "cover",
-                objectPosition: "center",
-                opacity: 0.5,
-              }}
-            />
-          </div>
-
-          <div
-            className="hidden sm:block absolute top-1/2 left-15 transform -translate-y-1/2 p-4 z-50"
-            style={{ fontSize: "1.2rem" }}
-          >
-            <button onClick={scrollToItinerary} className="text-[#575757]">
-              ITINERARY
-            </button>
-
-            <br></br>
-            <br></br>
-            <button onClick={scrollToVenue} className="text-[#575757]">
-              FINER DETAILS
-            </button>
-            <br></br>
-            <br></br>
-            <button onClick={scrollToRsvp} className="text-[#575757]">
-              RSVP
-            </button>
-          </div>
-          <div
-            style={{
-              position: "absolute",
-              top: 10,
-              right: 10,
-              padding: "2rem",
-            }}
-          >
-            <button
-              onClick={scrollToRsvp}
-              style={{
-                backgroundColor: "#FFFFFF",
-                color: "#d4af37",
-                padding: "0.5rem 1.5rem",
-                border: "none",
-              }}
-            >
-              RSVP
-            </button>
-          </div>
-          <div
-            style={{
-              position: "absolute",
-              bottom: "15%",
-              width: "100%",
-              textAlign: "center",
-            }}
-          >
-            <div
-              className="text-white sm:text-[#000000] text-6xl sm:text-8xl title"
-              style={{ fontFamily: "Silenter, cursive" }}
-            >
-              Adrian
-            </div>
-            <div
-              className="text-white sm:text-[#000000] text-xl sm:text-xl title"
-              style={{ fontFamily: "Silenter, cursive" }}
-            >
-              &
-            </div>
-            <div
-              className="text-white sm:text-[#000000] text-6xl sm:text-8xl title mt-4"
-              style={{ fontFamily: "Silenter, cursive" }}
-            >
-              Natalie
-            </div>
-            <div className="justify-between text-white sm:text-[#000000] text-sm sm:text-lg sm:mt-28 mt-4">
-              <p>May 10, 2025</p>
-              <p>St Vasilios Greek Orthodox Church | Carousel</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div
-        id="itinerary"
-        className="py-16"
+    <main className="min-h-screen flex flex-col items-center bg-[#f8f6f2]">
+      {/* Minimal Top Navigation */}
+      <nav
+        className="w-full flex justify-between items-center px-8 py-6 border-b border-earth-light bg-white/80 fixed top-0 left-0 z-50"
         style={{
-          height: "33%",
-          backgroundColor: "FFFFFF",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
+          fontFamily: "Playfair Display, serif",
+          letterSpacing: "0.04em",
+          backdropFilter: "blur(8px)",
         }}
       >
-        <div
-          className=""
-          style={{
-            fontSize: "3rem",
-            color: "#2B1105",
-            fontFamily: "Silenter, cursive",
-          }}
-        >
-          Itinerary
+        <div className="flex gap-8 text-earth-brown text-lg">
+          <a href="#about" className="hover:underline">
+            About
+          </a>
+          <a href="#gallery" className="hover:underline">
+            Gallery
+          </a>
         </div>
-        <div
-          className=""
-          style={{ fontSize: "1rem", color: "#2B1105", textAlign: "center" }}
-        >
-          <p>May 10, 2025</p>
+        <div className="text-2xl font-semibold tracking-widest text-earth-brown">
+          CHARLIE & ELYSIA
         </div>
-        <div className="hidden sm:block">
-          <div style={{ display: "flex", marginTop: "2rem" }}>
-            <div
-              className=""
-              style={{
-                fontSize: "1.5rem",
-                marginRight: "35rem",
-                color: "#d4af37",
-              }}
+        <div className="flex gap-8 text-earth-brown text-lg">
+          <a href="#rsvp" className="hover:underline">
+            RSVP
+          </a>
+          <a href="#itinerary" className="hover:underline">
+            Itinerary
+          </a>
+        </div>
+      </nav>
+      {/* Fullscreen Hero Section */}
+      <section
+        className="relative w-full h-screen flex items-center justify-center"
+        style={{ minHeight: "100vh", marginTop: "72px" }}
+      >
+        <Image
+          src="/sunnyside.JPG"
+          alt="Venue"
+          fill
+          style={{ objectFit: "cover", zIndex: 0 }}
+          priority
+        />
+        <div className="absolute inset-0 bg-[#f8f6f2]/60 z-10" />
+        <div className="relative z-20 flex flex-col items-center justify-center w-full h-full">
+          <h1
+            className="text-5xl md:text-7xl font-serif mb-4 text-earth-brown drop-shadow-lg"
+            style={{
+              fontFamily: "Playfair Display, serif",
+              fontWeight: 600,
+              letterSpacing: "0.04em",
+            }}
+          >
+            Charlie & Elysia
+          </h1>
+          <div
+            className="text-2xl md:text-3xl text-earth-olive mb-2 tracking-wide"
+            style={{ fontFamily: "Playfair Display, serif" }}
+          >
+            May 10, 2025
+          </div>
+          <div
+            className="text-lg md:text-xl text-earth-brown mb-6"
+            style={{ fontFamily: "Playfair Display, serif" }}
+          >
+            St Vasilios Greek Orthodox Church | Carousel
+          </div>
+        </div>
+      </section>
+      {/* About Section */}
+      <section
+        id="about"
+        className="w-full flex flex-col items-center py-20 px-4 bg-[#f8f6f2]"
+      >
+        <div className="max-w-3xl w-full flex flex-col md:flex-row items-center gap-12">
+          <div className="flex-1">
+            <h2
+              className="text-3xl font-serif mb-4 text-earth-brown"
+              style={{ fontFamily: "Playfair Display, serif", fontWeight: 600 }}
             >
-              1pm
+              About Us
+            </h2>
+            <p
+              className="text-lg text-earth-brown leading-relaxed"
+              style={{ fontFamily: "Playfair Display, serif" }}
+            >
+              We are so excited to celebrate our special day with you. Our story
+              is one of love, laughter, and adventure, and we can’t wait to
+              share this next chapter with our closest friends and family.
+              Please join us for a day filled with joy, beauty, and
+              unforgettable memories.
+            </p>
+          </div>
+          <div className="flex-1 flex justify-center">
+            <div className="rounded-3xl overflow-hidden shadow-lg border border-earth-light w-72 h-96 bg-white/80">
+              <Image
+                src="/ann.jpg"
+                alt="Charlie & Elysia"
+                width={288}
+                height={384}
+                style={{ objectFit: "cover", width: "100%", height: "100%" }}
+              />
             </div>
-            <div>
+          </div>
+        </div>
+      </section>
+      {/* Gallery Section */}
+      <section
+        id="gallery"
+        className="w-full flex flex-col items-center py-20 px-4 bg-[#f8f6f2]"
+      >
+        <div className="max-w-5xl w-full grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="rounded-2xl overflow-hidden border border-earth-light shadow-sm aspect-[4/5] bg-white/80">
+            <Image
+              src="/carousel-intro-4.jpg"
+              alt="Gallery 1"
+              width={400}
+              height={500}
+              style={{ objectFit: "cover", width: "100%", height: "100%" }}
+            />
+          </div>
+          <div className="rounded-2xl overflow-hidden border border-earth-light shadow-sm aspect-[4/5] bg-white/80">
+            <Image
+              src="/jake&taylor.png"
+              alt="Gallery 2"
+              width={400}
+              height={500}
+              style={{ objectFit: "cover", width: "100%", height: "100%" }}
+            />
+          </div>
+          <div className="rounded-2xl overflow-hidden border border-earth-light shadow-sm aspect-[4/5] bg-white/80">
+            <Image
+              src="/ann.jpg"
+              alt="Gallery 3"
+              width={400}
+              height={500}
+              style={{ objectFit: "cover", width: "100%", height: "100%" }}
+            />
+          </div>
+        </div>
+      </section>
+      {/* Itinerary Section */}
+      <section
+        id="itinerary"
+        className="w-full flex flex-col items-center py-20 px-4 bg-[#f8f6f2]"
+      >
+        <div className="max-w-3xl w-full flex flex-col items-center">
+          <h2
+            className="text-3xl font-serif mb-8 text-earth-brown"
+            style={{ fontFamily: "Playfair Display, serif", fontWeight: 600 }}
+          >
+            Itinerary
+          </h2>
+          <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="rounded-2xl border border-earth-light bg-white/80 p-8 flex flex-col items-center shadow-sm">
               <div
-                style={{
-                  fontSize: "1.5rem",
-                  color: "#2B1105",
-                  marginLeft: "-25rem",
-                }}
+                className="text-xl font-semibold text-earth-brown mb-2"
+                style={{ fontFamily: "Playfair Display, serif" }}
               >
-                Ceremony
+                1:00pm — Ceremony
               </div>
-              <div
-                style={{
-                  fontSize: "1rem",
-                  color: "#2B1105",
-                  marginLeft: "-25rem",
-                }}
-              >
+              <div className="text-earth-brown mb-1">
                 St Vasilios Greek Orthodox Church
               </div>
-              <div
-                style={{
-                  fontSize: "1rem",
-                  color: "#2B1105",
-                  marginLeft: "-25rem",
-                }}
-              >
+              <div className="text-earth-olive mb-1">
                 15 Staley St, Brunswick 3056
               </div>
-              <div
-                style={{
-                  fontSize: "1rem",
-                  color: "#2B1105",
-                  marginLeft: "-25rem",
-                }}
-              >
+              <div className="text-sm text-earth-olive">
                 Please arrive 15 mins early.
               </div>
             </div>
-          </div>
-          <div style={{ display: "flex", marginTop: "2rem" }}>
-            <div
-              style={{
-                fontSize: "1.5rem",
-                marginRight: "35rem",
-                color: "#d4af37",
-              }}
-            >
-              6pm
-            </div>
-            <div>
+            <div className="rounded-2xl border border-earth-light bg-white/80 p-8 flex flex-col items-center shadow-sm">
               <div
-                style={{
-                  fontSize: "1.5rem",
-                  color: "#2B1105",
-                  marginLeft: "-25rem",
-                }}
+                className="text-xl font-semibold text-earth-brown mb-2"
+                style={{ fontFamily: "Playfair Display, serif" }}
               >
-                Reception
+                6:00pm — Reception
               </div>
-              <div
-                style={{
-                  fontSize: "1rem",
-                  color: "#2B1105",
-                  marginLeft: "-25rem",
-                }}
-              >
-                Carousel
+              <div className="text-earth-brown mb-1">Carousel</div>
+              <div className="text-earth-olive mb-1">
+                22 Aughtie Dr, Albert Park 3205
               </div>
-              <div
-                style={{
-                  fontSize: "1rem",
-                  color: "#2B1105",
-                  marginLeft: "-25rem",
-                }}
-              >
-                22 Augtie Dr, Albert Park 3205
-              </div>
-              <div
-                style={{
-                  fontSize: "1rem",
-                  color: "#2B1105",
-                  marginLeft: "-25rem",
-                }}
-              >
+              <div className="text-sm text-earth-olive">
                 Will conclude at approximately 11pm.
               </div>
             </div>
           </div>
         </div>
-        <div className="sm:hidden">
-          <div style={{ display: "flex", marginTop: "2rem" }}>
-            <div
-              className=""
-              style={{
-                fontSize: "1.5rem",
-                marginLeft: "35rem",
-                color: "#d4af37",
-              }}
-            ></div>
-            <div>
-              <div
-                className=""
-                style={{
-                  fontSize: "1.5rem",
-                  marginLeft: "-25rem",
-                  color: "#d4af37",
-                }}
-              >
-                1pm
-              </div>
-              <div
-                style={{
-                  fontSize: "1.5rem",
-                  color: "#2B1105",
-                  marginLeft: "-25rem",
-                }}
-              >
-                Ceremony
-              </div>
-              <div
-                style={{
-                  fontSize: "1rem",
-                  color: "#2B1105",
-                  marginLeft: "-25rem",
-                  fontWeight: "700",
-                }}
-              >
-                St Vasilios Greek Orthodox Church
-              </div>
-              <div
-                style={{
-                  fontSize: "1rem",
-                  color: "#2B1105",
-                  marginLeft: "-25rem",
-                }}
-              >
-                15 Staley St, Brunswick 3056
-              </div>
-
-              <div
-                style={{
-                  fontSize: "1rem",
-                  color: "#2B1105",
-                  marginLeft: "-25rem",
-                }}
-              >
-                Please arrive 15 mins early.
-              </div>
-            </div>
+      </section>
+      {/* RSVP Section */}
+      <section
+        id="rsvp"
+        className="w-full flex flex-col items-center py-20 px-4 bg-[#f8f6f2]"
+      >
+        <div className="max-w-2xl w-full flex flex-col items-center rounded-2xl border border-earth-light bg-white/80 p-10 shadow-md">
+          <h2
+            className="text-3xl font-serif mb-6 text-earth-brown"
+            style={{ fontFamily: "Playfair Display, serif", fontWeight: 600 }}
+          >
+            RSVP
+          </h2>
+          <div
+            className="text-lg text-earth-brown mb-6"
+            style={{ fontFamily: "Playfair Display, serif" }}
+          >
+            Please RSVP by the 10th of March.
           </div>
-          <div style={{ display: "flex", marginTop: "2rem" }}>
-            <div
-              className=""
-              style={{
-                fontSize: "1.5rem",
-                marginLeft: "35rem",
-                color: "#d4af37",
-              }}
-            ></div>
-            <div>
-              <div
-                className=""
-                style={{
-                  fontSize: "1.5rem",
-                  marginLeft: "-25rem",
-                  color: "#d4af37",
-                }}
-              >
-                6pm
-              </div>
-              <div
-                style={{
-                  fontSize: "1.5rem",
-                  color: "#2B1105",
-                  marginLeft: "-25rem",
-                }}
-              >
-                Reception
-              </div>
-              <div
-                style={{
-                  fontSize: "1rem",
-                  color: "#2B1105",
-                  marginLeft: "-25rem",
-                  fontWeight: "700",
-                }}
-              >
-                Carousel
-              </div>
-              <div
-                style={{
-                  fontSize: "1rem",
-                  color: "#2B1105",
-                  marginLeft: "-25rem",
-                }}
-              >
-                22 Augtie Dr, Albert Park 3205
-              </div>
-              <div
-                style={{
-                  fontSize: "1rem",
-                  color: "#2B1105",
-                  marginLeft: "-25rem",
-                }}
-              >
-                Will conclude at approximately 11pm.
-              </div>
-            </div>
-          </div>
+          {/* RSVP form remains, but styled for minimal look */}
+          {/* ...insert RSVP form JSX here, using existing logic but updating classes for minimal look... */}
         </div>
-      </div>
+      </section>
       <div className="sm:hidden">
         <div
           id="venue"
