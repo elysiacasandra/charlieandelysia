@@ -3,7 +3,6 @@ import Input from "@/components/Input";
 import axios from "axios";
 import InputSelect from "@/components/InputSelect";
 import React, { useRef, useEffect, useState } from "react";
-import Image from "next/image";
 
 export default function Home() {
   const [success, setSuccess] = useState("");
@@ -137,11 +136,10 @@ export default function Home() {
 
     axios
       .post(
-        "https://api.jotform.com/form/242380990130856/submissions?apiKey=bde7681abe1e68fe08c8ebfeb33075d1",
+        "https://api.jotform.com/form/231597280572058/submissions?apiKey=29c52d502b1011d0b7099b54077218ca",
         newData
       )
       .then((response) => {
-        console.log("Success:", response);
         setMobileNumber("");
         setEmail("");
         setFirstName("");
@@ -171,7 +169,6 @@ export default function Home() {
       .catch((error) => {
         console.error(error);
         setError(" ");
-        console.log("ERROR");
       });
   };
 
@@ -182,222 +179,388 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen flex flex-col items-center bg-[#f8f6f2]">
-      {/* Minimal Top Navigation */}
-      <nav
-        className="w-full flex justify-between items-center px-8 py-6 border-b border-earth-light bg-white/80 fixed top-0 left-0 z-50"
-        style={{
-          fontFamily: "Playfair Display, serif",
-          letterSpacing: "0.04em",
-          backdropFilter: "blur(8px)",
-        }}
-      >
-        <div className="flex gap-8 text-earth-brown text-lg">
-          <a href="#about" className="hover:underline">
-            About
-          </a>
-          <a href="#gallery" className="hover:underline">
-            Gallery
-          </a>
-        </div>
-        <div className="text-2xl font-semibold tracking-widest text-earth-brown">
-          CHARLIE & ELYSIA
-        </div>
-        <div className="flex gap-8 text-earth-brown text-lg">
-          <a href="#rsvp" className="hover:underline">
-            RSVP
-          </a>
-          <a href="#itinerary" className="hover:underline">
-            Itinerary
-          </a>
-        </div>
-      </nav>
-      {/* Fullscreen Hero Section */}
-      <section
-        className="relative w-full h-screen flex items-center justify-center"
-        style={{ minHeight: "100vh", marginTop: "72px" }}
-      >
-        <Image
-          src="/sunnyside.JPG"
-          alt="Venue"
-          fill
-          style={{ objectFit: "cover", zIndex: 0 }}
-          priority
-        />
-        <div className="absolute inset-0 bg-[#f8f6f2]/60 z-10" />
-        <div className="relative z-20 flex flex-col items-center justify-center w-full h-full">
-          <h1
-            className="text-5xl md:text-7xl font-serif mb-4 text-earth-brown drop-shadow-lg"
+    <main className="flex min-h-screen flex-col justify-between overflow-x-hidden">
+      <div>
+        <div className="h-screen">
+          <div className="md:hidden">
+            <video
+              src="/Video-453.mov"
+              autoPlay
+              muted
+              playsInline
+              loop
+              style={{
+                width: "100vw",
+                height: "100vh",
+                objectFit: "cover",
+                objectPosition: "center",
+                position: "absolute",
+                top: 0,
+                left: 0,
+              }}
+            >
+              <source src="video.mov" type="video/mov" />
+            </video>
+          </div>
+          <div className="hidden md:block">
+            <video
+              src="/sunnyside.mp4"
+              autoPlay
+              muted
+              playsInline
+              loop
+              style={{
+                width: "100vw",
+                height: "100vh",
+                objectFit: "cover",
+                objectPosition: "center",
+                position: "absolute",
+                top: 0,
+                left: 0,
+              }}
+            >
+              <source src="video.mp4" type="video/mp4" />
+            </video>
+          </div>
+          <div
+            className="absolute top-1/2 left-15 transform -translate-y-1/2 p-4"
+            style={{ fontSize: "1.2rem" }}
+          >
+            <button onClick={scrollToItinerary} style={{ color: "#FFFFFF" }}>
+              Itinerary
+            </button>
+            <br></br>
+            <br></br>
+            <button onClick={scrollToVenue} style={{ color: "#FFFFFF" }}>
+              Venue
+            </button>
+            <br></br>
+            <br></br>
+            <button onClick={scrollToRsvp} style={{ color: "#FFFFFF" }}>
+              RSVP
+            </button>
+          </div>
+          <div
             style={{
-              fontFamily: "Playfair Display, serif",
-              fontWeight: 600,
-              letterSpacing: "0.04em",
+              position: "absolute",
+              top: 10,
+              right: 10,
+              padding: "2rem",
             }}
           >
-            Charlie & Elysia
-          </h1>
-          <div
-            className="text-2xl md:text-3xl text-earth-olive mb-2 tracking-wide"
-            style={{ fontFamily: "Playfair Display, serif" }}
-          >
-            May 10, 2025
-          </div>
-          <div
-            className="text-lg md:text-xl text-earth-brown mb-6"
-            style={{ fontFamily: "Playfair Display, serif" }}
-          >
-            St Vasilios Greek Orthodox Church | Carousel
-          </div>
-        </div>
-      </section>
-      {/* About Section */}
-      <section
-        id="about"
-        className="w-full flex flex-col items-center py-20 px-4 bg-[#f8f6f2]"
-      >
-        <div className="max-w-3xl w-full flex flex-col md:flex-row items-center gap-12">
-          <div className="flex-1">
-            <h2
-              className="text-3xl font-serif mb-4 text-earth-brown"
-              style={{ fontFamily: "Playfair Display, serif", fontWeight: 600 }}
+            <button
+              onClick={scrollToRsvp}
+              style={{
+                backgroundColor: "#BFDACC",
+                color: "#729A90",
+                padding: "0.5rem 1.5rem",
+                border: "none",
+              }}
             >
-              About Us
-            </h2>
-            <p
-              className="text-lg text-earth-brown leading-relaxed"
-              style={{ fontFamily: "Playfair Display, serif" }}
-            >
-              We are so excited to celebrate our special day with you. Our story
-              is one of love, laughter, and adventure, and we can’t wait to
-              share this next chapter with our closest friends and family.
-              Please join us for a day filled with joy, beauty, and
-              unforgettable memories.
-            </p>
+              RSVP
+            </button>
           </div>
-          <div className="flex-1 flex justify-center">
-            <div className="rounded-3xl overflow-hidden shadow-lg border border-earth-light w-72 h-96 bg-white/80">
-              <Image
-                src="/ann.jpg"
-                alt="Charlie & Elysia"
-                width={288}
-                height={384}
-                style={{ objectFit: "cover", width: "100%", height: "100%" }}
-              />
+          <div
+            style={{
+              position: "absolute",
+              bottom: "15%",
+              width: "100%",
+              textAlign: "center",
+            }}
+          >
+            <div className="text-white text-6xl md:text-8xl">CHARLIE</div>
+            <div className="text-white text-6xl md:text-8xl">& ELYSIA</div>
+            <div className="justify-between text-white text-lg md:text-xl">
+              <p style={{ fontFamily: "var(--font-adelia)" }}>
+                a decade distilled
+              </p>
             </div>
           </div>
         </div>
-      </section>
-      {/* Gallery Section */}
-      <section
-        id="gallery"
-        className="w-full flex flex-col items-center py-20 px-4 bg-[#f8f6f2]"
-      >
-        <div className="max-w-5xl w-full grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="rounded-2xl overflow-hidden border border-earth-light shadow-sm aspect-[4/5] bg-white/80">
-            <Image
-              src="/carousel-intro-4.jpg"
-              alt="Gallery 1"
-              width={400}
-              height={500}
-              style={{ objectFit: "cover", width: "100%", height: "100%" }}
-            />
-          </div>
-          <div className="rounded-2xl overflow-hidden border border-earth-light shadow-sm aspect-[4/5] bg-white/80">
-            <Image
-              src="/jake&taylor.png"
-              alt="Gallery 2"
-              width={400}
-              height={500}
-              style={{ objectFit: "cover", width: "100%", height: "100%" }}
-            />
-          </div>
-          <div className="rounded-2xl overflow-hidden border border-earth-light shadow-sm aspect-[4/5] bg-white/80">
-            <Image
-              src="/ann.jpg"
-              alt="Gallery 3"
-              width={400}
-              height={500}
-              style={{ objectFit: "cover", width: "100%", height: "100%" }}
-            />
-          </div>
-        </div>
-      </section>
-      {/* Itinerary Section */}
-      <section
+      </div>
+      <div
         id="itinerary"
-        className="w-full flex flex-col items-center py-20 px-4 bg-[#f8f6f2]"
+        className="py-16"
+        style={{
+          height: "33%",
+          backgroundColor: "FCF9F7",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
       >
-        <div className="max-w-3xl w-full flex flex-col items-center">
-          <h2
-            className="text-3xl font-serif mb-8 text-earth-brown"
-            style={{ fontFamily: "Playfair Display, serif", fontWeight: 600 }}
-          >
-            Itinerary
-          </h2>
-          <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="rounded-2xl border border-earth-light bg-white/80 p-8 flex flex-col items-center shadow-sm">
+        <div className="" style={{ fontSize: "3rem", color: "#2B1105" }}>
+          Itinerary
+        </div>
+        <div
+          className=""
+          style={{ fontSize: "1rem", color: "#2B1105", textAlign: "center" }}
+        >
+          <p>December 30, 2023</p>
+          <p>The Continental Hotel Sorrento</p>
+        </div>
+        <div className="hidden md:block">
+          <div style={{ display: "flex", marginTop: "2rem" }}>
+            <div
+              className=""
+              style={{
+                fontSize: "1.5rem",
+                marginRight: "35rem",
+                color: "#729A90",
+              }}
+            >
+              2pm
+            </div>
+            <div>
               <div
-                className="text-xl font-semibold text-earth-brown mb-2"
-                style={{ fontFamily: "Playfair Display, serif" }}
+                style={{
+                  fontSize: "1.5rem",
+                  color: "#2B1105",
+                  marginLeft: "-25rem",
+                }}
               >
-                1:00pm — Ceremony
+                Ceremony
               </div>
-              <div className="text-earth-brown mb-1">
-                St Vasilios Greek Orthodox Church
+              <div
+                style={{
+                  fontSize: "1rem",
+                  color: "#2B1105",
+                  marginLeft: "-25rem",
+                }}
+              >
+                Hosted in the Grand Ballroom.
               </div>
-              <div className="text-earth-olive mb-1">
-                15 Staley St, Brunswick 3056
-              </div>
-              <div className="text-sm text-earth-olive">
+              <div
+                style={{
+                  fontSize: "1rem",
+                  color: "#2B1105",
+                  marginLeft: "-25rem",
+                }}
+              >
                 Please arrive 15 mins early.
               </div>
             </div>
-            <div className="rounded-2xl border border-earth-light bg-white/80 p-8 flex flex-col items-center shadow-sm">
+          </div>
+          <div style={{ display: "flex", marginTop: "2rem" }}>
+            <div
+              style={{
+                fontSize: "1.5rem",
+                marginRight: "35rem",
+                color: "#729A90",
+              }}
+            >
+              5pm
+            </div>
+            <div>
               <div
-                className="text-xl font-semibold text-earth-brown mb-2"
-                style={{ fontFamily: "Playfair Display, serif" }}
+                style={{
+                  fontSize: "1.5rem",
+                  color: "#2B1105",
+                  marginLeft: "-25rem",
+                }}
               >
-                6:00pm — Reception
+                Drinks
               </div>
-              <div className="text-earth-brown mb-1">Carousel</div>
-              <div className="text-earth-olive mb-1">
-                22 Aughtie Dr, Albert Park 3205
+              <div
+                style={{
+                  fontSize: "1rem",
+                  color: "#2B1105",
+                  marginLeft: "-25rem",
+                }}
+              >
+                Meet at the Sunset Terrace.
               </div>
-              <div className="text-sm text-earth-olive">
+            </div>
+          </div>
+          <div style={{ display: "flex", marginTop: "2rem" }}>
+            <div
+              style={{
+                fontSize: "1.5rem",
+                marginRight: "35rem",
+                color: "#729A90",
+              }}
+            >
+              6pm
+            </div>
+            <div>
+              <div
+                style={{
+                  fontSize: "1.5rem",
+                  color: "#2B1105",
+                  marginLeft: "-25rem",
+                }}
+              >
+                Reception
+              </div>
+              <div
+                style={{
+                  fontSize: "1rem",
+                  color: "#2B1105",
+                  marginLeft: "-25rem",
+                }}
+              >
+                Held at Halcyon Hall.
+              </div>
+              <div
+                style={{
+                  fontSize: "1rem",
+                  color: "#2B1105",
+                  marginLeft: "-25rem",
+                }}
+              >
                 Will conclude at approximately 11pm.
               </div>
             </div>
           </div>
         </div>
-      </section>
-      {/* RSVP Section */}
-      <section
-        id="rsvp"
-        className="w-full flex flex-col items-center py-20 px-4 bg-[#f8f6f2]"
-      >
-        <div className="max-w-2xl w-full flex flex-col items-center rounded-2xl border border-earth-light bg-white/80 p-10 shadow-md">
-          <h2
-            className="text-3xl font-serif mb-6 text-earth-brown"
-            style={{ fontFamily: "Playfair Display, serif", fontWeight: 600 }}
-          >
-            RSVP
-          </h2>
-          <div
-            className="text-lg text-earth-brown mb-6"
-            style={{ fontFamily: "Playfair Display, serif" }}
-          >
-            Please RSVP by the 10th of March.
+        <div className="md:hidden">
+          <div style={{ display: "flex", marginTop: "2rem" }}>
+            <div
+              className=""
+              style={{
+                fontSize: "1.5rem",
+                marginLeft: "35rem",
+                color: "#729A90",
+              }}
+            ></div>
+            <div>
+              <div
+                className=""
+                style={{
+                  fontSize: "1.5rem",
+                  marginLeft: "-25rem",
+                  color: "#729A90",
+                }}
+              >
+                2pm
+              </div>
+              <div
+                style={{
+                  fontSize: "1.5rem",
+                  color: "#2B1105",
+                  marginLeft: "-25rem",
+                }}
+              >
+                Ceremony
+              </div>
+              <div
+                style={{
+                  fontSize: "1rem",
+                  color: "#2B1105",
+                  marginLeft: "-25rem",
+                }}
+              >
+                Hosted in the Grand Ballroom.
+              </div>
+              <div
+                style={{
+                  fontSize: "1rem",
+                  color: "#2B1105",
+                  marginLeft: "-25rem",
+                }}
+              >
+                Please arrive 15 mins early.
+              </div>
+            </div>
           </div>
-          {/* RSVP form remains, but styled for minimal look */}
-          {/* ...insert RSVP form JSX here, using existing logic but updating classes for minimal look... */}
+          <div style={{ display: "flex", marginTop: "2rem" }}>
+            <div
+              className=""
+              style={{
+                fontSize: "1.5rem",
+                marginLeft: "35rem",
+                color: "#729A90",
+              }}
+            ></div>
+            <div>
+              <div
+                className=""
+                style={{
+                  fontSize: "1.5rem",
+                  marginLeft: "-25rem",
+                  color: "#729A90",
+                }}
+              >
+                5pm
+              </div>
+              <div
+                style={{
+                  fontSize: "1.5rem",
+                  color: "#2B1105",
+                  marginLeft: "-25rem",
+                }}
+              >
+                Drinks
+              </div>
+              <div
+                style={{
+                  fontSize: "1rem",
+                  color: "#2B1105",
+                  marginLeft: "-25rem",
+                }}
+              >
+                Meet at the Sunset Terrace.
+              </div>
+            </div>
+          </div>
+          <div style={{ display: "flex", marginTop: "2rem" }}>
+            <div
+              className=""
+              style={{
+                fontSize: "1.5rem",
+                marginLeft: "35rem",
+                color: "#729A90",
+              }}
+            ></div>
+            <div>
+              <div
+                className=""
+                style={{
+                  fontSize: "1.5rem",
+                  marginLeft: "-25rem",
+                  color: "#729A90",
+                }}
+              >
+                6pm
+              </div>
+              <div
+                style={{
+                  fontSize: "1.5rem",
+                  color: "#2B1105",
+                  marginLeft: "-25rem",
+                }}
+              >
+                Reception
+              </div>
+              <div
+                style={{
+                  fontSize: "1rem",
+                  color: "#2B1105",
+                  marginLeft: "-25rem",
+                }}
+              >
+                Held at Halcyon Hall.
+              </div>
+              <div
+                style={{
+                  fontSize: "1rem",
+                  color: "#2B1105",
+                  marginLeft: "-25rem",
+                }}
+              >
+                Will conclude at approximately 11pm.
+              </div>
+            </div>
+          </div>
         </div>
-      </section>
-      <div className="sm:hidden">
+      </div>
+      <div className="md:hidden">
         <div
           id="venue"
           style={{
-            backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.35)), url('/ann.jpg')`,
-            backgroundPosition: "center",
+            // backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.35)), url('/jake&taylor.png')`,
+            backgroundPosition: "top",
             backgroundSize: "cover",
             display: "flex",
             justifyContent: "center",
@@ -407,97 +570,71 @@ export default function Home() {
         >
           <div
             className="py-16 w-full"
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              width: "60%",
-              backgroundColor: "#FFFFFF",
-              opacity: "50%",
-            }}
+            style={{ display: "flex", justifyContent: "center", width: "90%" }}
           >
             <div style={{ color: "#2B1105", width: "60%" }}>
               <h3
                 className="text-center"
-                style={{
-                  fontSize: "2rem",
-                  marginBottom: "1rem",
-                }}
+                style={{ fontSize: "2rem", marginBottom: "1rem" }}
+              >
+                Venue
+              </h3>
+              <p className="text-center" style={{ fontSize: "1rem" }}>
+                Hosted at The Continental Hotel Sorrento. There will be signage
+                around the venue to help direct guests during the day.
+              </p>
+            </div>
+          </div>
+          <div
+            className="pb-16 w-full"
+            style={{ display: "flex", justifyContent: "center", width: "90%" }}
+          >
+            <div style={{ color: "#2B1105", width: "60%" }}>
+              <h3
+                className="text-center"
+                style={{ fontSize: "2rem", marginBottom: "1rem" }}
               >
                 Parking
               </h3>
               <p className="text-center" style={{ fontSize: "1rem" }}>
-                There is ample public parking spaces in front of Carousel which
-                costs $6.
+                There are public parking spaces under the hotel, however, these
+                can not be reserved. There is full day parking behind IGA and on
+                Kerferd Avenue that we recommend using.
               </p>
             </div>
           </div>
           <div
             className="pb-16 w-full"
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              width: "60%",
-              backgroundColor: "#FFFFFF",
-              opacity: "50%",
-            }}
+            style={{ display: "flex", justifyContent: "center", width: "90%" }}
           >
             <div style={{ color: "#2B1105", width: "60%" }}>
               <h3
                 className="text-center"
-                style={{
-                  fontSize: "2rem",
-                  marginBottom: "1rem",
-                }}
-              >
-                Dress Code
-              </h3>
-              <p className="text-center" style={{ fontSize: "1rem" }}>
-                Black Tie.
-              </p>
-            </div>
-          </div>
-          <div
-            className="pb-16 w-full"
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              width: "60%",
-              backgroundColor: "#FFFFFF",
-              opacity: "50%",
-            }}
-          >
-            <div style={{ color: "#2B1105", width: "60%" }}>
-              <h3
-                className="text-center"
-                style={{
-                  fontSize: "2rem",
-                  marginBottom: "1rem",
-                }}
+                style={{ fontSize: "2rem", marginBottom: "1rem" }}
               >
                 Gifts
               </h3>
               <p className="text-center" style={{ fontSize: "1rem" }}>
-                Your presence at our wedding is the greatest gift of all.
-                However should you wish to honour us with a gift, a wishing well
-                will be available at the reception.
+                Your presence at our wedding is truly the greatest gift. However
+                should you wish to honour us further, a wishing well will be
+                present on the evening.
               </p>
             </div>
           </div>
         </div>
       </div>
-      <div className="hidden sm:block">
+      <div className="hidden md:block">
         <div
           id="venue1"
           style={{
-            backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)), url('/carousel-intro-4.jpg')`,
-            backgroundPosition: "center",
+            // backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)), url('/theconti.jpeg')`,
+            backgroundPosition: "top",
             backgroundSize: "cover",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
             flexDirection: "column",
           }}
-          className="text-center"
         >
           <div
             className="py-36 w-full"
@@ -507,89 +644,29 @@ export default function Home() {
               width: "60%",
             }}
           >
-            <div
-              style={{
-                color: "#000000",
-                width: "30%",
-                backgroundColor: "#FFFFFF",
-                opacity: "50%",
-              }}
-            >
-              <h3
-                style={{
-                  fontSize: "2rem",
-                  marginBottom: "1rem",
-                  marginTop: "1rem",
-                }}
-              >
+            <div style={{ color: "#FFFFFF", width: "30%" }}>
+              <h3 style={{ fontSize: "2rem", marginBottom: "1rem" }}>Venue</h3>
+              <p style={{ fontSize: "1rem" }}>
+                Hosted at The Continental Hotel Sorrento. There will be signage
+                around the venue to help direct guests during the day.
+              </p>
+            </div>
+            <div style={{ color: "#FFFFFF", width: "30%" }}>
+              <h3 style={{ fontSize: "2rem", marginBottom: "1rem" }}>
                 Parking
               </h3>
-              <p
-                style={{
-                  fontSize: "1rem",
-                  marginLeft: "1rem",
-                  marginRight: "1rem",
-                }}
-              >
-                There is ample public parking spaces in front of Carousel which
-                costs $6.
+              <p style={{ fontSize: "1rem" }}>
+                There are public parking spaces under the hotel, however, these
+                can not be reserved. There is full day parking behind IGA and on
+                Kerferd Avenue that we recommend using.
               </p>
             </div>
-            <div
-              style={{
-                color: "#000000",
-                width: "30%",
-                backgroundColor: "#FFFFFF",
-                opacity: "50%",
-              }}
-            >
-              <h3
-                style={{
-                  fontSize: "2rem",
-                  marginBottom: "1rem",
-                  marginTop: "1rem",
-                }}
-              >
-                Dress Code
-              </h3>
-              <p
-                style={{
-                  fontSize: "1rem",
-                  marginLeft: "1rem",
-                  marginRight: "1rem",
-                }}
-              >
-                Black Tie.
-              </p>
-            </div>
-            <div
-              style={{
-                color: "#000000",
-                width: "30%",
-                backgroundColor: "#FFFFFF",
-                opacity: "50%",
-              }}
-            >
-              <h3
-                style={{
-                  fontSize: "2rem",
-                  marginBottom: "1rem",
-                  marginTop: "1rem",
-                }}
-              >
-                Gifts
-              </h3>
-              <p
-                style={{
-                  fontSize: "1rem",
-                  marginLeft: "1rem",
-                  marginRight: "1rem",
-                  marginBottom: "1rem",
-                }}
-              >
-                Your presence at our wedding is the greatest gift of all.
-                However should you wish to honour us with a gift, a wishing well
-                will be available at the reception.
+            <div style={{ color: "#FFFFFF", width: "30%" }}>
+              <h3 style={{ fontSize: "2rem", marginBottom: "1rem" }}>Gifts</h3>
+              <p style={{ fontSize: "1rem" }}>
+                Your presence at our wedding is truly the greatest gift. However
+                should you wish to honour us further, a wishing well will be
+                present on the evening.
               </p>
             </div>
           </div>
@@ -597,26 +674,22 @@ export default function Home() {
       </div>
       <div
         id="rsvp"
-        className="mx-8 sm:mx-0 pb-16 min-h-screen bg-FFFFFF flex flex-col items-center justify-center"
+        className="mx-8 md:mx-0 pb-16 min-h-screen bg-FCF9F7 flex flex-col items-center justify-center"
       >
         <div
           className="pt-16 pb-4"
-          style={{
-            fontSize: "3rem",
-            color: "#2B1105",
-            fontFamily: "Silenter, cursive",
-          }}
+          style={{ fontSize: "3rem", color: "#2B1105" }}
         >
-          Your Attendance
+          RSVP
         </div>
 
         {success === "" && (
           <div style={{ fontSize: "1rem", color: "#2B1105" }}>
-            Please RSVP by the 10th of March.
+            Please RSVP by the 1st of August.
           </div>
         )}
         {success !== "" && (
-          <p className="text-black">
+          <p className="text-green-700">
             Thank you for your RSVP. We look forward to seeing you on our
             special day.
           </p>
@@ -1007,8 +1080,8 @@ export default function Home() {
                 onClick={(event) => submitForm(event)}
                 className="px-6 py-2 text-white font-semibold transition duration-150 ease-in-out shadow-md hover:bg-green-700 focus:outline-none focus:shadow-outline-blue active:bg-green-700"
                 style={{
-                  backgroundColor: "#FFFFFF",
-                  color: "#d4af37",
+                  backgroundColor: "#BFDACC",
+                  color: "#729A90",
                   padding: "0.5rem 1.5rem",
                   border: "none",
                 }}
@@ -1022,8 +1095,8 @@ export default function Home() {
                 onClick={(event) => submitForm(event)}
                 className="px-6 py-2 text-white font-semibold transition duration-150 ease-in-out shadow-md hover:bg-green-700 focus:outline-none focus:shadow-outline-blue active:bg-gray-700"
                 style={{
-                  backgroundColor: "#FFFFFF",
-                  color: "#57575757",
+                  backgroundColor: "#BFDACC",
+                  color: "#729A90",
                   padding: "0.5rem 1.5rem",
                   border: "none",
                   cursor: "not-allowed",

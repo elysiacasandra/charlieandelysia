@@ -4,8 +4,9 @@
 
 :root {
   --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 255, 255, 255;
-  --background-end-rgb: 249, 249, 249;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+  --font-adelia: "Adelia", cursive;
 }
 
 @font-face {
@@ -17,31 +18,15 @@
 }
 
 @font-face {
-  font-family: "Playfair Display";
-  src: url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap");
-  font-optical-sizing: auto;
+  font-family: "Adelia";
+  src: url("/fonts/adelia.otf") format("opentype"),
+    url("/fonts/adelia.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
-}
-
-@font-face {
-  font-family: "Great Vibes";
-  src: url("/fonts/great-vibes-regular.woff2") format("woff2"),
-    url("/fonts/great-vibes-regular.woff") format("woff");
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: "Silenter";
-  font-style: italic;
-  font-weight: 400;
-  src: local("Silenter"),
-    url("https://fonts.cdnfonts.com/s/55457/Silenter-JRypj.woff") format("woff");
 }
 
 body {
-  font-family: "Times New Roman", sans-serif;
+  font-family: "Abhaya Libre", sans-serif;
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(
       to bottom,
