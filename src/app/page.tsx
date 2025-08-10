@@ -310,7 +310,7 @@ export default function Home() {
                 color: "#729A90",
               }}
             >
-              2pm
+              4pm
             </div>
             <div>
               <div
@@ -329,7 +329,7 @@ export default function Home() {
                   marginLeft: "-25rem",
                 }}
               >
-                Hosted in the Grand Ballroom.
+                Hosted in the Manor Garden.
               </div>
               <div
                 style={{
@@ -338,7 +338,8 @@ export default function Home() {
                   marginLeft: "-25rem",
                 }}
               >
-                Please arrive 15 mins early.
+                Please arrive at least 15 mins early to walk to the manor garden
+                and find your seat.
               </div>
             </div>
           </div>
@@ -360,7 +361,7 @@ export default function Home() {
                   marginLeft: "-25rem",
                 }}
               >
-                Drinks
+                Meze & Drinks
               </div>
               <div
                 style={{
@@ -369,7 +370,7 @@ export default function Home() {
                   marginLeft: "-25rem",
                 }}
               >
-                Meet at the Sunset Terrace.
+                In the gardens.
               </div>
             </div>
           </div>
@@ -381,7 +382,7 @@ export default function Home() {
                 color: "#729A90",
               }}
             >
-              6pm
+              6:30pm
             </div>
             <div>
               <div
@@ -391,7 +392,7 @@ export default function Home() {
                   marginLeft: "-25rem",
                 }}
               >
-                Reception
+                Reception.
               </div>
               <div
                 style={{
@@ -400,7 +401,7 @@ export default function Home() {
                   marginLeft: "-25rem",
                 }}
               >
-                Held at Halcyon Hall.
+                Held at the Grand Hall.
               </div>
               <div
                 style={{
@@ -409,7 +410,7 @@ export default function Home() {
                   marginLeft: "-25rem",
                 }}
               >
-                Will conclude at approximately 11pm.
+                Will conclude at approximately 12pm.
               </div>
             </div>
           </div>
@@ -433,7 +434,7 @@ export default function Home() {
                   color: "#729A90",
                 }}
               >
-                2pm
+                4pm
               </div>
               <div
                 style={{
@@ -451,7 +452,7 @@ export default function Home() {
                   marginLeft: "-25rem",
                 }}
               >
-                Hosted in the Grand Ballroom.
+                Hosted in the Manor Garden
               </div>
               <div
                 style={{
@@ -460,7 +461,8 @@ export default function Home() {
                   marginLeft: "-25rem",
                 }}
               >
-                Please arrive 15 mins early.
+                Please arrive at least 15 mins early to walk to the manor garden
+                and find your seat.
               </div>
             </div>
           </div>
@@ -491,7 +493,7 @@ export default function Home() {
                   marginLeft: "-25rem",
                 }}
               >
-                Drinks
+                Meze & Drinks
               </div>
               <div
                 style={{
@@ -500,7 +502,7 @@ export default function Home() {
                   marginLeft: "-25rem",
                 }}
               >
-                Meet at the Sunset Terrace.
+                In the gardens.
               </div>
             </div>
           </div>
@@ -522,7 +524,7 @@ export default function Home() {
                   color: "#729A90",
                 }}
               >
-                6pm
+                6:30pm
               </div>
               <div
                 style={{
@@ -540,7 +542,7 @@ export default function Home() {
                   marginLeft: "-25rem",
                 }}
               >
-                Held at Halcyon Hall.
+                Held at the Grand Hall.
               </div>
               <div
                 style={{
@@ -549,7 +551,7 @@ export default function Home() {
                   marginLeft: "-25rem",
                 }}
               >
-                Will conclude at approximately 11pm.
+                Will conclude at approximately 12pm.
               </div>
             </div>
           </div>
