@@ -203,12 +203,9 @@ export default function Home() {
             </video>
           </div>
           <div className="hidden md:block">
-            <video
-              src="/sunnyside.mp4"
-              autoPlay
-              muted
-              playsInline
-              loop
+            <img
+              src="/fig.jpg"
+              alt="Background"
               style={{
                 width: "100vw",
                 height: "100vh",
@@ -218,62 +215,68 @@ export default function Home() {
                 top: 0,
                 left: 0,
               }}
-            >
-              <source src="video.mp4" type="video/mp4" />
-            </video>
-          </div>
-          <div
-            className="absolute top-1/2 left-15 transform -translate-y-1/2 p-4"
-            style={{ fontSize: "1.2rem" }}
-          >
-            <button onClick={scrollToItinerary} style={{ color: "#FFFFFF" }}>
-              Itinerary
-            </button>
-            <br></br>
-            <br></br>
-            <button onClick={scrollToVenue} style={{ color: "#FFFFFF" }}>
-              Venue
-            </button>
-            <br></br>
-            <br></br>
-            <button onClick={scrollToRsvp} style={{ color: "#FFFFFF" }}>
-              RSVP
-            </button>
+            />
           </div>
           <div
             style={{
               position: "absolute",
-              top: 10,
-              right: 10,
-              padding: "2rem",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              textAlign: "center",
+              color: "#FFFFFF",
             }}
           >
-            <button
+            <div
+              style={{
+                fontSize: "1.5rem",
+                marginBottom: "0.5rem",
+                fontWeight: "300",
+              }}
+            >
+              the wedding of
+            </div>
+            <div
+              style={{
+                fontSize: "3rem",
+                marginBottom: "0.5rem",
+                fontWeight: "400",
+              }}
+            >
+              Charlie & Elysia
+            </div>
+            <div
+              style={{
+                fontSize: "1.2rem",
+                fontWeight: "300",
+                fontStyle: "italic",
+              }}
+            >
+              a decade distilled
+            </div>
+            <div
               onClick={scrollToRsvp}
               style={{
-                backgroundColor: "#BFDACC",
-                color: "#729A90",
-                padding: "0.5rem 1.5rem",
-                border: "none",
+                fontSize: "1rem",
+                fontWeight: "400",
+                marginTop: "2rem",
+                cursor: "pointer",
+                textDecoration: "underline",
+                textDecorationThickness: "1px",
+                textUnderlineOffset: "4px",
+                transition: "all 0.3s ease",
+                opacity: 0.9,
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.opacity = "1";
+                e.target.style.textDecorationThickness = "2px";
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.opacity = "0.9";
+                e.target.style.textDecorationThickness = "1px";
               }}
             >
               RSVP
-            </button>
-          </div>
-          <div
-            style={{
-              position: "absolute",
-              bottom: "15%",
-              width: "100%",
-              textAlign: "center",
-            }}
-          >
-            <div className="text-white text-6xl md:text-8xl">CHARLIE</div>
-            <div className="text-white text-6xl md:text-8xl">& ELYSIA</div>
-            <div className="justify-between text-white text-lg md:text-xl">
-              <p style={{ fontFamily: "var(--font-adelia)" }}>
-                a decade distilled
-              </p>
             </div>
           </div>
         </div>
@@ -283,7 +286,7 @@ export default function Home() {
         className="py-16"
         style={{
           height: "33%",
-          backgroundColor: "FCF9F7",
+          backgroundColor: "#F5F5F0",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -297,8 +300,9 @@ export default function Home() {
           className=""
           style={{ fontSize: "1rem", color: "#2B1105", textAlign: "center" }}
         >
-          <p>December 30, 2023</p>
-          <p>The Continental Hotel Sorrento</p>
+          <p>THE FOURTEENTH OF FEBRUARY TWO THOUSAND AND TWENTY SIX</p>
+          <p>SUNNYSIDE ESTATE</p>
+          <p>1 SUNNYSIDE RD, MOUNT ELIZA, VIC</p>
         </div>
         <div className="hidden md:block">
           <div style={{ display: "flex", marginTop: "2rem" }}>
@@ -307,7 +311,7 @@ export default function Home() {
               style={{
                 fontSize: "1.5rem",
                 marginRight: "35rem",
-                color: "#729A90",
+                color: "#686a4f",
               }}
             >
               4pm
@@ -329,17 +333,8 @@ export default function Home() {
                   marginLeft: "-25rem",
                 }}
               >
-                Hosted in the Manor Garden.
-              </div>
-              <div
-                style={{
-                  fontSize: "1rem",
-                  color: "#2B1105",
-                  marginLeft: "-25rem",
-                }}
-              >
-                Please arrive at least 15 mins early to walk to the manor garden
-                and find your seat.
+                Please arrive at 3:45pm so there is time to walk to the Manor
+                Gardens and find your seat.
               </div>
             </div>
           </div>
@@ -348,7 +343,7 @@ export default function Home() {
               style={{
                 fontSize: "1.5rem",
                 marginRight: "35rem",
-                color: "#729A90",
+                color: "#686a4f",
               }}
             >
               5pm
@@ -370,7 +365,8 @@ export default function Home() {
                   marginLeft: "-25rem",
                 }}
               >
-                In the gardens.
+                Let us break bread together beneath the late afternoon sun -
+                with flowing wine, live music, and good company.
               </div>
             </div>
           </div>
@@ -379,10 +375,10 @@ export default function Home() {
               style={{
                 fontSize: "1.5rem",
                 marginRight: "35rem",
-                color: "#729A90",
+                color: "#686a4f",
               }}
             >
-              6:30pm
+              7pm
             </div>
             <div>
               <div
@@ -401,16 +397,7 @@ export default function Home() {
                   marginLeft: "-25rem",
                 }}
               >
-                Held at the Grand Hall.
-              </div>
-              <div
-                style={{
-                  fontSize: "1rem",
-                  color: "#2B1105",
-                  marginLeft: "-25rem",
-                }}
-              >
-                Will conclude at approximately 12pm.
+                A night of feasting and celebration, concluding at midnight.
               </div>
             </div>
           </div>
@@ -431,7 +418,7 @@ export default function Home() {
                 style={{
                   fontSize: "1.5rem",
                   marginLeft: "-25rem",
-                  color: "#729A90",
+                  color: "#686a4f",
                 }}
               >
                 4pm
@@ -452,17 +439,8 @@ export default function Home() {
                   marginLeft: "-25rem",
                 }}
               >
-                Hosted in the Manor Garden
-              </div>
-              <div
-                style={{
-                  fontSize: "1rem",
-                  color: "#2B1105",
-                  marginLeft: "-25rem",
-                }}
-              >
-                Please arrive at least 15 mins early to walk to the manor garden
-                and find your seat.
+                Please arrive at 3:45pm so there is time to walk to the Manor
+                Gardens and find your seat.
               </div>
             </div>
           </div>
@@ -481,7 +459,7 @@ export default function Home() {
                 style={{
                   fontSize: "1.5rem",
                   marginLeft: "-25rem",
-                  color: "#729A90",
+                  color: "#686a4f",
                 }}
               >
                 5pm
@@ -502,7 +480,8 @@ export default function Home() {
                   marginLeft: "-25rem",
                 }}
               >
-                In the gardens.
+                Let us break bread together - with flowing wine, live music, and
+                good company.
               </div>
             </div>
           </div>
@@ -521,10 +500,10 @@ export default function Home() {
                 style={{
                   fontSize: "1.5rem",
                   marginLeft: "-25rem",
-                  color: "#729A90",
+                  color: "#686a4f",
                 }}
               >
-                6:30pm
+                7pm
               </div>
               <div
                 style={{
@@ -542,16 +521,7 @@ export default function Home() {
                   marginLeft: "-25rem",
                 }}
               >
-                Held at the Grand Hall.
-              </div>
-              <div
-                style={{
-                  fontSize: "1rem",
-                  color: "#2B1105",
-                  marginLeft: "-25rem",
-                }}
-              >
-                Will conclude at approximately 12pm.
+                A night of celebration, concluding at midnight.
               </div>
             </div>
           </div>
@@ -582,8 +552,10 @@ export default function Home() {
                 Venue
               </h3>
               <p className="text-center" style={{ fontSize: "1rem" }}>
-                Hosted at The Continental Hotel Sorrento. There will be signage
-                around the venue to help direct guests during the day.
+                All the events of the day will be hosted at Sunnyside Estate.
+                Food and drinks will be provided between the ceremony and the
+                reception, so there is no need to leave the estate prior to the
+                reception.
               </p>
             </div>
           </div>
@@ -599,9 +571,30 @@ export default function Home() {
                 Parking
               </h3>
               <p className="text-center" style={{ fontSize: "1rem" }}>
-                There are public parking spaces under the hotel, however, these
-                can not be reserved. There is full day parking behind IGA and on
-                Kerferd Avenue that we recommend using.
+                There are free and ample parking spaces on site. However, cars
+                are unable to be parked here overnight. Please park your car
+                outside the estate, on Sunnyside Rd, if you plan to leave it
+                overnight.
+              </p>
+            </div>
+          </div>
+          <div
+            className="pb-16 w-full"
+            style={{ display: "flex", justifyContent: "center", width: "90%" }}
+          >
+            <div style={{ color: "#2B1105", width: "60%" }}>
+              <h3
+                className="text-center"
+                style={{ fontSize: "2rem", marginBottom: "1rem" }}
+              >
+                Transport
+              </h3>
+              <p className="text-center" style={{ fontSize: "1rem" }}>
+                The estate is less than an hour from Melbourne, so you are able
+                to drive or organise a car service like taxi or uber to get you
+                back to Melbourne the night of the wedding. We encourage you to
+                book ahead of time so that there are enough ride shares in the
+                area for all our guests.
               </p>
             </div>
           </div>
@@ -641,29 +634,45 @@ export default function Home() {
           <div
             className="py-36 w-full"
             style={{
-              display: "flex",
-              justifyContent: "space-between",
-              width: "60%",
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+              gap: "3rem",
+              width: "80%",
             }}
           >
-            <div style={{ color: "#FFFFFF", width: "30%" }}>
+            <div style={{ color: "#FFFFFF" }}>
               <h3 style={{ fontSize: "2rem", marginBottom: "1rem" }}>Venue</h3>
               <p style={{ fontSize: "1rem" }}>
-                Hosted at The Continental Hotel Sorrento. There will be signage
-                around the venue to help direct guests during the day.
+                All the events of the day will be hosted at Sunnyside Estate.
+                Food and drinks will be provided between the ceremony and the
+                reception, so there is no need to leave the estate prior to the
+                reception.
               </p>
             </div>
-            <div style={{ color: "#FFFFFF", width: "30%" }}>
+            <div style={{ color: "#FFFFFF" }}>
               <h3 style={{ fontSize: "2rem", marginBottom: "1rem" }}>
                 Parking
               </h3>
               <p style={{ fontSize: "1rem" }}>
-                There are public parking spaces under the hotel, however, these
-                can not be reserved. There is full day parking behind IGA and on
-                Kerferd Avenue that we recommend using.
+                There are free and ample parking spaces on site. However, cars
+                are unable to be parked here overnight. Please park your car
+                outside the estate, on Sunnyside Rd, if you plan to leave it
+                overnight.
               </p>
             </div>
-            <div style={{ color: "#FFFFFF", width: "30%" }}>
+            <div style={{ color: "#FFFFFF" }}>
+              <h3 style={{ fontSize: "2rem", marginBottom: "1rem" }}>
+                Transport
+              </h3>
+              <p style={{ fontSize: "1rem" }}>
+                The estate is less than an hour from Melbourne, so you are able
+                to drive or organise a car service like taxi or uber to get you
+                back to Melbourne the night of the wedding. We encourage you to
+                book ahead of time so that there are enough ride shares in the
+                area for all our guests.
+              </p>
+            </div>
+            <div style={{ color: "#FFFFFF" }}>
               <h3 style={{ fontSize: "2rem", marginBottom: "1rem" }}>Gifts</h3>
               <p style={{ fontSize: "1rem" }}>
                 Your presence at our wedding is truly the greatest gift. However
