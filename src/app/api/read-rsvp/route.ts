@@ -9,8 +9,14 @@ const CSV_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/export
 
 export async function GET(request: NextRequest) {
   try {
+    // Add cache-busting parameter to force fresh data
+    const cacheBuster = `&_t=${Date.now()}`;
+    const csvUrlWithCacheBuster = CSV_URL + cacheBuster;
+
     // Fetch data from public Google Sheet via CSV export
-    const response = await fetch(CSV_URL);
+    const response = await fetch(csvUrlWithCacheBuster, {
+      cache: "no-store", // Disable Next.js caching
+    });
 
     if (!response.ok) {
       throw new Error(`Failed to fetch CSV data: ${response.status}`);
@@ -55,7 +61,10 @@ export async function GET(request: NextRequest) {
       const lastName = row[lastNameIndex] || "";
       const fullName = `${firstName} ${lastName}`.trim();
       const groupName = row[groupNameIndex] || "";
-      const mobile = row[mobileIndex] || "";
+      const rawMobile = row[mobileIndex] || "";
+
+      // Clean up mobile number: replace #N/A with empty string, otherwise use the value
+      const mobile = rawMobile === "#N/A" ? "" : rawMobile;
 
       if (fullName && groupName) {
         guestData.push({

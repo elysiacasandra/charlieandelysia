@@ -40,6 +40,18 @@ export async function POST(request: NextRequest) {
       isNewSubmission ? "NEW" : "UPDATE"
     );
 
+    // For edits, we'll add a special marker to indicate this is an updated submission
+    const isEditSubmission = !isNewSubmission;
+
+    if (isEditSubmission) {
+      console.log(
+        "⚠️  EDIT SUBMISSION: This will create a new entry in Google Forms"
+      );
+      console.log(
+        "⚠️  The original submission will remain - this is a limitation of Google Forms"
+      );
+    }
+
     // Format data for Google Form submission
     const formData = new URLSearchParams();
 
@@ -47,7 +59,12 @@ export async function POST(request: NextRequest) {
     // Based on the actual form structure from the HTML
 
     // Add group information (REQUIRED FIELDS - must be filled first)
-    formData.append("entry.667904074", groupName); // Group Name
+    // For edits, mark the group name to indicate it's an updated submission
+    const timestamp = new Date().toLocaleString();
+    const displayGroupName = isEditSubmission
+      ? `[EDITED ${timestamp}] ${groupName}`
+      : groupName;
+    formData.append("entry.667904074", displayGroupName); // Group Name
     formData.append("entry.1464722884", groupId.toString()); // Group ID
 
     // Add member information (up to 6 members based on form structure)
@@ -117,7 +134,11 @@ export async function POST(request: NextRequest) {
 
         // Always include dietary field (even if "None")
         if (member.dietary && member.dietary.trim() !== "") {
+          console.log(`Member ${index} dietary: "${member.dietary}"`);
           formData.append(fields.dietary, member.dietary);
+        } else {
+          console.log(`Member ${index} dietary: empty or None`);
+          formData.append(fields.dietary, "None");
         }
       }
     });
@@ -197,9 +218,12 @@ export async function POST(request: NextRequest) {
 
       if (formResponse.ok) {
         console.log("Successfully submitted to Google Form");
+        const message = isEditSubmission
+          ? "RSVP updated successfully! (Note: This creates a new entry - the original submission remains in your records)"
+          : "RSVP submitted successfully!";
         return NextResponse.json({
           success: true,
-          message: "RSVP submitted successfully!",
+          message,
           data: {
             groupId,
             groupName,

@@ -349,11 +349,16 @@ export default function Home() {
     }
   };
 
-  const checkExistingSubmission = async (groupId: number) => {
+  const checkExistingSubmission = async (
+    groupId: number,
+    personName: string
+  ) => {
     try {
-      // For now, we'll simulate checking for existing submissions
-      // In a real implementation, you would check your Google Sheet for existing entries
-      const response = await fetch(`/api/check-submission?groupId=${groupId}`);
+      const response = await fetch(
+        `/api/check-submission?groupId=${groupId}&personName=${encodeURIComponent(
+          personName
+        )}`
+      );
 
       if (!response.ok) {
         console.warn(`API request failed with status: ${response.status}`);
@@ -371,11 +376,19 @@ export default function Home() {
 
   const handleGroupSelect = async (group: any) => {
     setSelectedGroup(group);
-    setCurrentStep("details");
 
-    // Check for existing submission
-    const hasExisting = await checkExistingSubmission(group.id);
+    // Check for existing submission using the searched name
+    const hasExisting = await checkExistingSubmission(group.id, searchName);
     setExistingSubmission(hasExisting);
+
+    // If there's an existing submission, show the edit prompt in the confirm step
+    if (hasExisting) {
+      setShowEditPrompt(true);
+      // Stay in confirm step to show the edit prompt
+    } else {
+      setShowEditPrompt(false);
+      setCurrentStep("details");
+    }
 
     // Initialize attendance status and mobile numbers for all members
     const initialAttendance: { [key: string]: string } = {};
@@ -455,9 +468,8 @@ export default function Home() {
   ) => {
     event.preventDefault();
 
-    // Check if this is a resubmission
-    if (existingSubmission && !showEditPrompt) {
-      setShowEditPrompt(true);
+    // If edit prompt is showing, don't submit yet - wait for user's choice
+    if (showEditPrompt) {
       return;
     }
 
@@ -565,11 +577,43 @@ export default function Home() {
   const handleEditResponse = (shouldEdit: boolean) => {
     if (shouldEdit) {
       setShowEditPrompt(false);
+      setCurrentStep("details");
       // Allow form submission to proceed
     } else {
       setShowEditPrompt(false);
       setCurrentStep("complete");
     }
+  };
+
+  // Check if form is valid (all guests have attendance status and attending guests have dietary requirements)
+  const isFormValid = () => {
+    if (!selectedGroup) return false;
+
+    // Check if all members have attendance status selected
+    const allMembersHaveAttendance = selectedGroup.members.every(
+      (member: any) =>
+        attendanceStatus[member.name] === "attending" ||
+        attendanceStatus[member.name] === "not_attending"
+    );
+
+    if (!allMembersHaveAttendance) return false;
+
+    // Check if all attending members have dietary requirements
+    const attendingMembers = selectedGroup.members.filter(
+      (member: any) => attendanceStatus[member.name] === "attending"
+    );
+
+    const hasAllDietary = attendingMembers.every((member: any) => {
+      const hasDietary = (dietaryRequirements[member.name] || []).length > 0;
+      const hasCustomDietary = (
+        dietaryRequirements[member.name] || []
+      ).includes("Other")
+        ? customDietary[member.name] && customDietary[member.name].trim() !== ""
+        : true;
+      return hasDietary && hasCustomDietary;
+    });
+
+    return hasAllDietary;
   };
 
   const resetForm = () => {
@@ -1187,20 +1231,10 @@ export default function Home() {
                 ))}
               </div>
             </div>
-            <button
-              onClick={() => setCurrentStep("search")}
-              className="mt-4 text-gray-600 underline"
-            >
-              Not you? Search again
-            </button>
-          </>
-        )}
 
-        {currentStep === "details" && selectedGroup && (
-          <form>
-            {/* Edit Prompt for Resubmissions */}
+            {/* Edit Prompt for Existing Submissions */}
             {showEditPrompt && (
-              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 mb-6">
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 mt-6">
                 <h3 className="text-lg font-semibold text-yellow-800 mb-4">
                   You've already submitted an RSVP for this group.
                 </h3>
@@ -1225,6 +1259,19 @@ export default function Home() {
                 </div>
               </div>
             )}
+
+            <button
+              onClick={() => setCurrentStep("search")}
+              className="mt-6 text-gray-600 underline hover:text-gray-800 transition-colors duration-200"
+              style={{ fontSize: "0.9rem" }}
+            >
+              Not you? Search again
+            </button>
+          </>
+        )}
+
+        {currentStep === "details" && selectedGroup && (
+          <form style={{ width: "100%", maxWidth: "600px", margin: "0 auto" }}>
             <div
               style={{
                 fontSize: "1rem",
@@ -1386,19 +1433,44 @@ export default function Home() {
               </div>
             ))}
 
-            <div className="flex items-center justify-center mt-6">
+            <div className="flex flex-col items-center justify-center mt-6">
               <button
                 type="submit"
                 onClick={submitForm}
+                disabled={showEditPrompt || !isFormValid()}
                 className="px-6 py-2 text-white font-semibold transition duration-150 ease-in-out shadow-md"
                 style={{
-                  backgroundColor: "#BFDACC",
-                  color: "#729A90",
+                  backgroundColor:
+                    showEditPrompt || !isFormValid() ? "#E5E5E5" : "#BFDACC",
+                  color: showEditPrompt || !isFormValid() ? "#999" : "#729A90",
                   padding: "0.5rem 1.5rem",
                   border: "none",
+                  cursor:
+                    showEditPrompt || !isFormValid()
+                      ? "not-allowed"
+                      : "pointer",
+                  opacity: showEditPrompt || !isFormValid() ? 0.5 : 1,
                 }}
               >
-                Submit RSVP
+                {existingSubmission ? "Edit RSVP" : "Submit RSVP"}
+              </button>
+
+              {!showEditPrompt && !isFormValid() && (
+                <p className="text-sm text-gray-600 mt-2 text-center">
+                  Please select attendance status for all guests and provide
+                  dietary requirements for attending guests
+                </p>
+              )}
+            </div>
+
+            <div className="flex items-center justify-center mt-4">
+              <button
+                type="button"
+                onClick={() => setCurrentStep("search")}
+                className="text-gray-600 underline hover:text-gray-800 transition-colors duration-200"
+                style={{ fontSize: "0.9rem" }}
+              >
+                Not you? Search again
               </button>
             </div>
           </form>
