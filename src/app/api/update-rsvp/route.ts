@@ -1,8 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
 
+interface RSVPMember {
+  name: string;
+  attending: string;
+  mobile: string;
+  dietary: string;
+}
+
+interface RSVPRequestBody {
+  groupId: number;
+  groupName: string;
+  members: RSVPMember[];
+}
+
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
+    const body: RSVPRequestBody = await request.json();
     const { groupId, groupName, members } = body;
 
     console.log("RSVP Update Request:", {
