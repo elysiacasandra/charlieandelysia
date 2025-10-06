@@ -13,6 +13,17 @@ interface RSVPRequestBody {
   members: RSVPMember[];
 }
 
+interface MemberField {
+  name: string;
+  attending: string;
+  mobile: string;
+  dietary: string;
+}
+
+type MemberFields = {
+  [key in 0 | 1 | 2 | 3 | 4 | 5]: MemberField;
+};
+
 export async function POST(request: NextRequest) {
   try {
     const body: RSVPRequestBody = await request.json();
@@ -39,7 +50,7 @@ export async function POST(request: NextRequest) {
       if (index >= 6) return; // Limit to 6 members based on form structure
 
       // Field mapping based on actual form structure:
-      const memberFields = {
+      const memberFields: MemberFields = {
         0: {
           name: "entry.1392801261",
           attending: "entry.644702719",
