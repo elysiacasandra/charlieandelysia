@@ -652,12 +652,14 @@ export default function Home() {
                 opacity: 0.9,
               }}
               onMouseEnter={(e) => {
-                e.target.style.opacity = "1";
-                e.target.style.textDecorationThickness = "2px";
+                const target = e.target as HTMLElement;
+                target.style.opacity = "1";
+                target.style.textDecorationThickness = "2px";
               }}
               onMouseLeave={(e) => {
-                e.target.style.opacity = "0.9";
-                e.target.style.textDecorationThickness = "1px";
+                const target = e.target as HTMLElement;
+                target.style.opacity = "0.9";
+                target.style.textDecorationThickness = "1px";
               }}
             >
               RSVP
