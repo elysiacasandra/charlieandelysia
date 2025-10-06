@@ -89,7 +89,7 @@ export async function POST(request: NextRequest) {
         }, // Member 6
       };
 
-      const fields = memberFields[index];
+      const fields = memberFields[index as keyof MemberFields];
       if (fields) {
         // Always add the name field (required for Member 1, optional for others)
         if (member.name && member.name.trim() !== "") {
