@@ -354,10 +354,17 @@ export default function Home() {
       // For now, we'll simulate checking for existing submissions
       // In a real implementation, you would check your Google Sheet for existing entries
       const response = await fetch(`/api/check-submission?groupId=${groupId}`);
+
+      if (!response.ok) {
+        console.warn(`API request failed with status: ${response.status}`);
+        return false;
+      }
+
       const data = await response.json();
       return data.hasExistingSubmission || false;
     } catch (error) {
       console.error("Error checking existing submission:", error);
+      // Return false to allow new submissions when API is unavailable
       return false;
     }
   };
@@ -500,7 +507,14 @@ export default function Home() {
       newData.append(`member_${index}_dietary`, dietary || "None");
     });
 
-    // Submit to Google Sheets
+    // Submit to Google Sheets - use update endpoint for both new and existing submissions
+    // The API will handle the distinction internally
+    console.log("About to submit RSVP form...");
+    console.log("Selected group:", selectedGroup);
+    console.log("Attendance status:", attendanceStatus);
+    console.log("Dietary requirements:", dietaryRequirements);
+    console.log("Mobile numbers:", mobileNumbers);
+
     fetch("/api/update-rsvp", {
       method: "POST",
       headers: {
@@ -525,10 +539,15 @@ export default function Home() {
               : memberDietary.join(", ") || "None";
           })(),
         })),
+        isNewSubmission: !existingSubmission, // Flag to indicate if this is a new submission
       }),
     })
-      .then((response) => response.json())
+      .then((response) => {
+        console.log("Response received:", response.status, response.statusText);
+        return response.json();
+      })
       .then((data) => {
+        console.log("Response data:", data);
         if (data.success) {
           setCurrentStep("complete");
           setSuccess("Thank you for your RSVP!");

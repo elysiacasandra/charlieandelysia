@@ -11,6 +11,7 @@ interface RSVPRequestBody {
   groupId: number;
   groupName: string;
   members: RSVPMember[];
+  isNewSubmission?: boolean;
 }
 
 interface MemberField {
@@ -26,14 +27,18 @@ type MemberFields = {
 
 export async function POST(request: NextRequest) {
   try {
+    console.log("=== API ROUTE CALLED ===");
     const body: RSVPRequestBody = await request.json();
-    const { groupId, groupName, members } = body;
+    const { groupId, groupName, members, isNewSubmission } = body;
 
-    console.log("RSVP Update Request:", {
-      groupId,
+    console.log(
+      "RSVP Update Request - Group:",
       groupName,
-      members,
-    });
+      "ID:",
+      groupId,
+      "Type:",
+      isNewSubmission ? "NEW" : "UPDATE"
+    );
 
     // Format data for Google Form submission
     const formData = new URLSearchParams();
@@ -92,7 +97,12 @@ export async function POST(request: NextRequest) {
       const fields = memberFields[index as keyof MemberFields];
       if (fields) {
         // Always add the name field (required for Member 1, optional for others)
-        if (member.name && member.name.trim() !== "") {
+        if (index === 0) {
+          // Member 1 name is required
+          const nameValue =
+            member.name && member.name.trim() !== "" ? member.name : "Member 1";
+          formData.append(fields.name, nameValue);
+        } else if (member.name && member.name.trim() !== "") {
           formData.append(fields.name, member.name);
         }
 
@@ -105,25 +115,68 @@ export async function POST(request: NextRequest) {
           formData.append(fields.mobile, member.mobile);
         }
 
-        if (
-          member.dietary &&
-          member.dietary.trim() !== "" &&
-          member.dietary !== "None"
-        ) {
+        // Always include dietary field (even if "None")
+        if (member.dietary && member.dietary.trim() !== "") {
           formData.append(fields.dietary, member.dietary);
         }
       }
     });
 
-    // Log the formatted data
-    console.log(
-      "Formatted data for Google Form:",
-      Object.fromEntries(formData)
-    );
-
-    // Google Form URL for RSVP submissions
+    // Google Form URLs
     const GOOGLE_FORM_URL =
       "https://docs.google.com/forms/d/e/1FAIpQLScHWgt5DkhFNfcgU1pk3NZDLEzJMEB4x8YnFGrwUvMgSXEvWA/formResponse";
+    const GOOGLE_FORM_VIEW_URL =
+      "https://docs.google.com/forms/d/e/1FAIpQLScHWgt5DkhFNfcgU1pk3NZDLEzJMEB4x8YnFGrwUvMgSXEvWA/viewform";
+
+    // Fetch form to extract required hidden tokens and fields
+    let fbzxToken = "";
+    let partialResponse = "";
+    try {
+      const viewResp = await fetch(GOOGLE_FORM_VIEW_URL, {
+        method: "GET",
+        headers: { "User-Agent": "Mozilla/5.0 (compatible; RSVP-Bot/1.0)" },
+      });
+      const viewHtml = await viewResp.text();
+
+      // Extract fbzx token
+      const fbzxMatch = viewHtml.match(/name=\"fbzx\"\s+value=\"([^\"]+)\"/);
+      if (fbzxMatch && fbzxMatch[1]) {
+        fbzxToken = fbzxMatch[1];
+        console.log("Extracted fbzx token");
+      }
+
+      // Extract partialResponse
+      const partialMatch = viewHtml.match(
+        /name=\"partialResponse\"\s+value=\"([^\"]+)\"/
+      );
+      if (partialMatch && partialMatch[1]) {
+        partialResponse = partialMatch[1];
+        console.log("Extracted partialResponse: YES");
+      }
+
+      if (!fbzxToken || !partialResponse) {
+        console.warn("Missing required form tokens");
+      }
+    } catch (e) {
+      console.warn("Failed to fetch form view for tokens:", e);
+    }
+
+    // Append hidden fields expected by Google Forms submission
+    formData.append("fvv", "1");
+    formData.append("pageHistory", "0");
+    if (partialResponse) {
+      formData.append("partialResponse", partialResponse);
+    }
+    if (fbzxToken) {
+      formData.append("fbzx", fbzxToken);
+    }
+
+    // Log the formatted data (abbreviated) - after all fields are added
+    console.log(
+      "Formatted data entries:",
+      formData.toString().length,
+      "characters"
+    );
 
     // Submit to Google Form
     try {
@@ -156,8 +209,10 @@ export async function POST(request: NextRequest) {
       } else {
         const responseText = await formResponse.text();
         console.log(
-          "Form submission failed. Response text:",
-          responseText.substring(0, 500)
+          "Form submission failed. Status:",
+          formResponse.status,
+          "Response length:",
+          responseText.length
         );
         throw new Error(
           `Form submission failed: ${
