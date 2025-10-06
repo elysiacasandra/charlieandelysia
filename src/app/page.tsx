@@ -7,39 +7,268 @@ import React, { useRef, useEffect, useState } from "react";
 export default function Home() {
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
-
-  const [mobileNumber, setMobileNumber] = useState("");
-  const [email, setEmail] = useState<string>("");
-  const [firstName, setFirstName] = useState<string>("");
-  const [lastName, setLastName] = useState<string>("");
-  const [dietaryRequirement, setDietaryRequirement] = useState<string>("");
-  const [additionalGuests, setAdditionalGuests] = useState<string>("");
-  const [firstNameAG1, setFirstNameAG1] = useState<string>("");
-  const [lastNameAG1, setLastNameAG1] = useState<string>("");
-  const [dietaryRequirementAG1, setDietaryRequirementAG1] =
-    useState<string>("");
-  const [firstNameAG2, setFirstNameAG2] = useState<string>("");
-  const [lastNameAG2, setLastNameAG2] = useState<string>("");
-  const [dietaryRequirementAG2, setDietaryRequirementAG2] =
-    useState<string>("");
-  const [firstNameAG3, setFirstNameAG3] = useState<string>("");
-  const [lastNameAG3, setLastNameAG3] = useState<string>("");
-  const [dietaryRequirementAG3, setDietaryRequirementAG3] =
-    useState<string>("");
-  const [firstNameAG4, setFirstNameAG4] = useState<string>("");
-  const [lastNameAG4, setLastNameAG4] = useState<string>("");
-  const [dietaryRequirementAG4, setDietaryRequirementAG4] =
-    useState<string>("");
-  const [firstNameAG5, setFirstNameAG5] = useState<string>("");
-  const [lastNameAG5, setLastNameAG5] = useState<string>("");
-  const [dietaryRequirementAG5, setDietaryRequirementAG5] =
-    useState<string>("");
-  const [attendanceStatus, setAttendanceStatus] = useState<string>("");
-  const [attendanceStatusFinal, setAttendanceStatusFinal] =
-    useState<string>("");
+  const [searchName, setSearchName] = useState("");
+  const [foundGroup, setFoundGroup] = useState<any>(null);
+  const [selectedGroup, setSelectedGroup] = useState<any>(null);
+  const [attendanceStatus, setAttendanceStatus] = useState<{
+    [key: string]: string;
+  }>({});
+  const [mobileNumbers, setMobileNumbers] = useState<{ [key: string]: string }>(
+    {}
+  );
+  const [dietaryRequirements, setDietaryRequirements] = useState<{
+    [key: string]: string[];
+  }>({});
+  const [customDietary, setCustomDietary] = useState<{ [key: string]: string }>(
+    {}
+  );
+  const [editingName, setEditingName] = useState<string | null>(null);
+  const [editedName, setEditedName] = useState<string>("");
+  const [currentStep, setCurrentStep] = useState<
+    "search" | "confirm" | "details" | "complete"
+  >("search");
+  const [existingSubmission, setExistingSubmission] = useState<boolean>(false);
+  const [showEditPrompt, setShowEditPrompt] = useState<boolean>(false);
   const [screenSize, setScreenSize] = useState(() =>
     typeof window !== "undefined" ? window.innerWidth : 0
   );
+
+  // RSVP database - loaded from Google Sheets
+  const [rsvpDatabase, setRsvpDatabase] = useState([
+    {
+      id: 1,
+      group: "Charlie Robinson & Elysia Giannis",
+      members: [
+        { name: "Charlie Robinson", mobile: "" },
+        { name: "Elysia Giannis", mobile: "" },
+      ],
+    },
+    {
+      id: 2,
+      group: "Jake & Taylor Cunningham",
+      members: [
+        { name: "Jake Cunningham", mobile: "" },
+        { name: "Taylor Giannis", mobile: "" },
+      ],
+    },
+    {
+      id: 3,
+      group: "Jordan Giannis & Daniel Gordan",
+      members: [
+        { name: "Jordan Giannis", mobile: "" },
+        { name: "Daniel Gordon", mobile: "" },
+      ],
+    },
+    {
+      id: 4,
+      group: "Lou Giannis & Kathy Vlahakis",
+      members: [
+        { name: "Kathy Vlahakis", mobile: "" },
+        { name: "Lou Giannis", mobile: "" },
+      ],
+    },
+    {
+      id: 5,
+      group: "Con & Effie Vlahakis & Georgia Karaboiki",
+      members: [
+        { name: "Effie Vlahakis", mobile: "" },
+        { name: "Con Vlahakis", mobile: "" },
+        { name: "Georgia Karaboiki", mobile: "" },
+      ],
+    },
+    {
+      id: 6,
+      group: "John & Maria Vlahogiannis",
+      members: [
+        { name: "Maria Vlahogiannis", mobile: "" },
+        { name: "John Vlahogiannis", mobile: "" },
+      ],
+    },
+    {
+      id: 7,
+      group: "The Gonopoulos Family",
+      members: [
+        { name: "Mary Vlahakis", mobile: "" },
+        { name: "Stam Gonopoulos", mobile: "" },
+        { name: "Anston Gonopoulos", mobile: "" },
+        { name: "Matisse Gonopoulos", mobile: "" },
+        { name: "Liselle Gonopoulos", mobile: "" },
+      ],
+    },
+    {
+      id: 8,
+      group: "The Koutouzis Family",
+      members: [
+        { name: "Tassy Koutouzis", mobile: "" },
+        { name: "John Koutouzis", mobile: "" },
+        { name: "Darius Koutouzis", mobile: "" },
+        { name: "Matea Koutouzis", mobile: "" },
+      ],
+    },
+    {
+      id: 9,
+      group: "The Nastas Family",
+      members: [
+        { name: "Angela Nastas", mobile: "" },
+        { name: "George Nastas", mobile: "" },
+        { name: "Shana Nastas", mobile: "" },
+      ],
+    },
+    {
+      id: 10,
+      group: "Troy Pirani",
+      members: [{ name: "Troy Pirani", mobile: "" }],
+    },
+    {
+      id: 11,
+      group: "Mitch French & Alex Powell",
+      members: [
+        { name: "Mitch French", mobile: "" },
+        { name: "Alex Powell", mobile: "" },
+      ],
+    },
+    {
+      id: 12,
+      group: "David Mcfarlane & Georgie Tonkin",
+      members: [
+        { name: "Georgie Tonkin", mobile: "" },
+        { name: "David Mcfarlane", mobile: "" },
+      ],
+    },
+    {
+      id: 13,
+      group: "Dylan Clements",
+      members: [{ name: "Dylan Clements", mobile: "" }],
+    },
+    {
+      id: 14,
+      group: "Mathew & Sally Powell",
+      members: [
+        { name: "Matthew Powell", mobile: "" },
+        { name: "Sally Powell", mobile: "" },
+      ],
+    },
+    {
+      id: 15,
+      group: "Olivia Ferella",
+      members: [{ name: "Olivia Ferella", mobile: "" }],
+    },
+    {
+      id: 16,
+      group: "Daniel Phan",
+      members: [{ name: "Daniel Phan", mobile: "" }],
+    },
+    {
+      id: 17,
+      group: "Ricardo Gallardo",
+      members: [{ name: "Ricardo Gallardo", mobile: "" }],
+    },
+    {
+      id: 18,
+      group: "Liam Crough",
+      members: [{ name: "Liam Crough", mobile: "" }],
+    },
+    {
+      id: 19,
+      group: "Nathan Genovese",
+      members: [{ name: "Nathan Genovese", mobile: "" }],
+    },
+    {
+      id: 20,
+      group: "Kathy Nguyen",
+      members: [{ name: "Kathy Nguyen", mobile: "" }],
+    },
+    {
+      id: 21,
+      group: "Melinda Mann",
+      members: [{ name: "Melinda Mann", mobile: "" }],
+    },
+    {
+      id: 22,
+      group: "Ivan & Sandra Cindric",
+      members: [
+        { name: "Sandra Cindric", mobile: "" },
+        { name: "Ivan Cindric", mobile: "" },
+      ],
+    },
+    {
+      id: 23,
+      group: "Anthony & Tracy Spadafora",
+      members: [
+        { name: "Anthony Spadafora", mobile: "" },
+        { name: "Tracy Spadafora", mobile: "" },
+      ],
+    },
+    {
+      id: 24,
+      group: "Lou & Kathy Kourouklis",
+      members: [
+        { name: "Kathy Kourouklis", mobile: "" },
+        { name: "Lou Kourouklis", mobile: "" },
+      ],
+    },
+    {
+      id: 25,
+      group: "Samuel Robinson & Olivia La Selva",
+      members: [
+        { name: "Samuel Robinson", mobile: "" },
+        { name: "Olivia La Selva", mobile: "" },
+      ],
+    },
+    {
+      id: 26,
+      group: "Edward & Georgia Robinson",
+      members: [
+        { name: "Edward Robinson", mobile: "" },
+        { name: "Georgia Robinson", mobile: "" },
+      ],
+    },
+    {
+      id: 27,
+      group: "Peter Robinson & Joanne Furguson",
+      members: [
+        { name: "Peter Robinson", mobile: "" },
+        { name: "Joanne Furgerson", mobile: "" },
+      ],
+    },
+    {
+      id: 28,
+      group: "Grant, Jenny, Olivia & Liam Holmes",
+      members: [{ name: "Jenny Holmes", mobile: "" }],
+    },
+  ]);
+
+  // Load RSVP database from Google Sheets
+  useEffect(() => {
+    const loadRsvpData = async () => {
+      try {
+        const response = await fetch("/api/read-rsvp");
+        const data = await response.json();
+
+        if (data.success) {
+          setRsvpDatabase(data.data);
+          console.log("Loaded RSVP data from Google Sheets:", data.data);
+        } else {
+          console.error("Failed to load RSVP data:", data.error);
+        }
+      } catch (error) {
+        console.error("Error loading RSVP data:", error);
+      }
+    };
+
+    loadRsvpData();
+  }, []);
+
+  const dietaryOptions = [
+    "None",
+    "Gluten free",
+    "Dairy Free",
+    "Vegetarian",
+    "Vegan",
+    "Nut free",
+    "Seafood Allergy",
+    "Other",
+  ];
 
   const handleWindowResize = () => {
     setScreenSize(window.innerWidth);
@@ -94,15 +323,124 @@ export default function Home() {
     }
   };
 
-  const handleAttendanceChange = (event: {
-    target: { value: React.SetStateAction<string> };
-  }) => {
-    setAttendanceStatus(event.target.value);
-    if (event.target.value === "acceptWithPleasure") {
-      setAttendanceStatusFinal("Accept with pleasure");
-    } else {
-      setAttendanceStatusFinal("Regretfully decline");
+  const handleSearch = () => {
+    const searchTerm = searchName.toLowerCase().trim();
+
+    if (!searchTerm) {
+      setError("Please enter a name to search.");
+      return;
     }
+
+    // Clear any previous errors
+    setError("");
+
+    // Find exact matches only
+    const found = rsvpDatabase.find((group) =>
+      group.members.some((member) => member.name.toLowerCase() === searchTerm)
+    );
+
+    if (found) {
+      setFoundGroup(found);
+      setCurrentStep("confirm");
+    } else {
+      setError(
+        "Name not found. Please check your spelling, type the name of another member of your party or contact us at 0434488448."
+      );
+    }
+  };
+
+  const checkExistingSubmission = async (groupId: number) => {
+    try {
+      // For now, we'll simulate checking for existing submissions
+      // In a real implementation, you would check your Google Sheet for existing entries
+      const response = await fetch(`/api/check-submission?groupId=${groupId}`);
+      const data = await response.json();
+      return data.hasExistingSubmission || false;
+    } catch (error) {
+      console.error("Error checking existing submission:", error);
+      return false;
+    }
+  };
+
+  const handleGroupSelect = async (group: any) => {
+    setSelectedGroup(group);
+    setCurrentStep("details");
+
+    // Check for existing submission
+    const hasExisting = await checkExistingSubmission(group.id);
+    setExistingSubmission(hasExisting);
+
+    // Initialize attendance status and mobile numbers for all members
+    const initialAttendance: { [key: string]: string } = {};
+    const initialDietary: { [key: string]: string[] } = {};
+    const initialMobile: { [key: string]: string } = {};
+    group.members.forEach((member: any) => {
+      initialAttendance[member.name] = "";
+      initialDietary[member.name] = [];
+      // Prepopulate mobile number if it exists in the database
+      initialMobile[member.name] = member.mobile || "04";
+    });
+    setAttendanceStatus(initialAttendance);
+    setDietaryRequirements(initialDietary);
+    setMobileNumbers(initialMobile);
+  };
+
+  const handleAttendanceChange = (memberName: string, status: string) => {
+    setAttendanceStatus((prev) => ({
+      ...prev,
+      [memberName]: status,
+    }));
+  };
+
+  const handleMobileChange = (memberName: string, mobile: string) => {
+    setMobileNumbers((prev) => ({
+      ...prev,
+      [memberName]: mobile,
+    }));
+  };
+
+  const handleCustomDietaryChange = (memberName: string, custom: string) => {
+    setCustomDietary((prev) => ({
+      ...prev,
+      [memberName]: custom,
+    }));
+  };
+
+  const handleEditName = (memberName: string) => {
+    setEditingName(memberName);
+    setEditedName(memberName);
+  };
+
+  const handleSaveNameEdit = () => {
+    if (!editingName || !editedName.trim()) return;
+
+    // Update the member name in the selected group
+    const updatedGroup = {
+      ...selectedGroup,
+      members: selectedGroup.members.map((member: any) =>
+        member.name === editingName
+          ? { ...member, name: editedName.trim() }
+          : member
+      ),
+    };
+
+    // Update group name if this was the primary member
+    const primaryMember = updatedGroup.members.find((m: any) => m.isPrimary);
+    if (primaryMember && editingName === primaryMember.name) {
+      updatedGroup.group = updatedGroup.group.replace(
+        editingName,
+        editedName.trim()
+      );
+    }
+
+    setSelectedGroup(updatedGroup);
+    setEditingName(null);
+    setEditedName("");
+  };
+
+  const handleCancelNameEdit = () => {
+    setEditingName(null);
+    setEditedName("");
   };
 
   const submitForm = (
@@ -110,72 +448,126 @@ export default function Home() {
   ) => {
     event.preventDefault();
 
-    const newData = new URLSearchParams();
-    newData.append("submission[4_first]", firstName);
-    newData.append("submission[4_last]", lastName);
-    newData.append("submission[7_first]", firstNameAG1);
-    newData.append("submission[7_last]", lastNameAG1);
-    newData.append("submission[13_first]", firstNameAG2);
-    newData.append("submission[13_last]", lastNameAG2);
-    newData.append("submission[14_first]", firstNameAG3);
-    newData.append("submission[14_last]", lastNameAG3);
-    newData.append("submission[15_first]", firstNameAG4);
-    newData.append("submission[15_last]", lastNameAG4);
-    newData.append("submission[16_first]", firstNameAG5);
-    newData.append("submission[16_last]", lastNameAG5);
-    newData.append("submission[30]", mobileNumber);
-    newData.append("submission[23]", email);
-    newData.append("submission[11]", additionalGuests);
-    newData.append("submission[24]", dietaryRequirement);
-    newData.append("submission[25]", dietaryRequirementAG1);
-    newData.append("submission[26]", dietaryRequirementAG2);
-    newData.append("submission[27]", dietaryRequirementAG3);
-    newData.append("submission[28]", dietaryRequirementAG4);
-    newData.append("submission[29]", dietaryRequirementAG5);
-    newData.append("submission[22]", attendanceStatusFinal);
+    // Check if this is a resubmission
+    if (existingSubmission && !showEditPrompt) {
+      setShowEditPrompt(true);
+      return;
+    }
 
-    axios
-      .post(
-        "https://api.jotform.com/form/231597280572058/submissions?apiKey=29c52d502b1011d0b7099b54077218ca",
-        newData
-      )
-      .then((response) => {
-        setMobileNumber("");
-        setEmail("");
-        setFirstName("");
-        setLastName("");
-        setDietaryRequirement("");
-        setAdditionalGuests("");
-        setFirstNameAG1("");
-        setLastNameAG1("");
-        setDietaryRequirementAG1("");
-        setFirstNameAG2("");
-        setLastNameAG2("");
-        setDietaryRequirementAG2("");
-        setFirstNameAG3("");
-        setLastNameAG3("");
-        setDietaryRequirementAG3("");
-        setFirstNameAG4("");
-        setLastNameAG4("");
-        setDietaryRequirementAG4("");
-        setFirstNameAG5("");
-        setLastNameAG5("");
-        setDietaryRequirementAG5("");
-        setAttendanceStatus("");
-        setAttendanceStatusFinal("");
-        scrollToRsvp();
-        setSuccess(" ");
+    // Validate all attending guests have dietary requirements
+    const attendingMembers = selectedGroup.members.filter(
+      (member: any) => attendanceStatus[member.name] === "attending"
+    );
+
+    const missingDietary = attendingMembers.some((member: any) => {
+      const hasDietary = (dietaryRequirements[member.name] || []).length > 0;
+      const hasCustomDietary = (
+        dietaryRequirements[member.name] || []
+      ).includes("Other")
+        ? customDietary[member.name] && customDietary[member.name].trim() !== ""
+        : true;
+      return !hasDietary || !hasCustomDietary;
+    });
+
+    if (missingDietary) {
+      setError("Please provide dietary requirements for all attending guests.");
+      return;
+    }
+
+    // Prepare data for submission
+    const newData = new URLSearchParams();
+    newData.append("group_id", selectedGroup.id.toString());
+    newData.append("group_name", selectedGroup.group);
+
+    selectedGroup.members.forEach((member: any, index: number) => {
+      const isAttending = attendanceStatus[member.name] === "attending";
+      const memberDietary = dietaryRequirements[member.name] || [];
+      const hasCustom = memberDietary.includes("Other");
+      const dietary =
+        hasCustom && customDietary[member.name]
+          ? [
+              ...memberDietary.filter((item) => item !== "Other"),
+              customDietary[member.name],
+            ].join(", ")
+          : memberDietary.join(", ");
+
+      newData.append(`member_${index}_name`, member.name);
+      newData.append(`member_${index}_attending`, isAttending ? "Yes" : "No");
+      newData.append(
+        `member_${index}_mobile`,
+        mobileNumbers[member.name] || ""
+      );
+      newData.append(`member_${index}_dietary`, dietary || "None");
+    });
+
+    // Submit to Google Sheets
+    fetch("/api/update-rsvp", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        groupId: selectedGroup.id,
+        groupName: selectedGroup.group,
+        members: selectedGroup.members.map((member: any, index: number) => ({
+          name: member.name,
+          attending:
+            attendanceStatus[member.name] === "attending" ? "Yes" : "No",
+          mobile: mobileNumbers[member.name] || "",
+          dietary: (() => {
+            const memberDietary = dietaryRequirements[member.name] || [];
+            const hasCustom = memberDietary.includes("Other");
+            return hasCustom && customDietary[member.name]
+              ? [
+                  ...memberDietary.filter((item) => item !== "Other"),
+                  customDietary[member.name],
+                ].join(", ")
+              : memberDietary.join(", ") || "None";
+          })(),
+        })),
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          setCurrentStep("complete");
+          setSuccess("Thank you for your RSVP!");
+          scrollToRsvp();
+        } else {
+          throw new Error(data.error || "Failed to update RSVP");
+        }
       })
       .catch((error) => {
-        console.error(error);
-        setError(" ");
+        console.error("Error submitting RSVP:", error);
+        setError("We were unable to submit your RSVP. Please try again.");
       });
   };
 
-  const handleAdditionalGuestsChange = (event: {
-    target: { value: React.SetStateAction<string> };
-  }) => {
-    setAdditionalGuests(event.target.value);
+  const handleEditResponse = (shouldEdit: boolean) => {
+    if (shouldEdit) {
+      setShowEditPrompt(false);
+      // Allow form submission to proceed
+    } else {
+      setShowEditPrompt(false);
+      setCurrentStep("complete");
+    }
+  };
+
+  const resetForm = () => {
+    setSearchName("");
+    setFoundGroup(null);
+    setSelectedGroup(null);
+    setAttendanceStatus({});
+    setMobileNumbers({});
+    setDietaryRequirements({});
+    setCustomDietary({});
+    setEditingName(null);
+    setEditedName("");
+    setExistingSubmission(false);
+    setShowEditPrompt(false);
+    setCurrentStep("search");
+    setError("");
+    setSuccess("");
   };
 
   return (
@@ -220,7 +612,7 @@ export default function Home() {
           <div
             style={{
               position: "absolute",
-              top: "50%",
+              top: "75%",
               left: "50%",
               transform: "translate(-50%, -50%)",
               textAlign: "center",
@@ -229,18 +621,10 @@ export default function Home() {
           >
             <div
               style={{
-                fontSize: "1.5rem",
-                marginBottom: "0.5rem",
-                fontWeight: "300",
-              }}
-            >
-              the wedding of
-            </div>
-            <div
-              style={{
-                fontSize: "3rem",
+                fontSize: "clamp(2rem, 8vw, 3rem)",
                 marginBottom: "0.5rem",
                 fontWeight: "400",
+                whiteSpace: "nowrap",
               }}
             >
               Charlie & Elysia
@@ -388,7 +772,7 @@ export default function Home() {
                   marginLeft: "-25rem",
                 }}
               >
-                Reception.
+                Reception
               </div>
               <div
                 style={{
@@ -552,10 +936,10 @@ export default function Home() {
                 Venue
               </h3>
               <p className="text-center" style={{ fontSize: "1rem" }}>
-                All the events of the day will be hosted at Sunnyside Estate.
-                Food and drinks will be provided between the ceremony and the
-                reception, so there is no need to leave the estate prior to the
-                reception.
+                All the events of the day will be hosted at Sunnyside Estate,
+                which is less than an hours drive from Melbourne. Food and
+                drinks will be provided between the ceremony and the reception,
+                so there is no need to leave the estate prior to the reception.
               </p>
             </div>
           </div>
@@ -590,9 +974,8 @@ export default function Home() {
                 Transport
               </h3>
               <p className="text-center" style={{ fontSize: "1rem" }}>
-                The estate is less than an hour from Melbourne, so you are able
-                to drive or organise a car service like taxi or uber to get you
-                back to Melbourne the night of the wedding. We encourage you to
+                You are able to drive or organise a car service like taxi or
+                uber to get you to and from the wedding. We encourage you to
                 book ahead of time so that there are enough ride shares in the
                 area for all our guests.
               </p>
@@ -643,10 +1026,10 @@ export default function Home() {
             <div style={{ color: "#FFFFFF" }}>
               <h3 style={{ fontSize: "2rem", marginBottom: "1rem" }}>Venue</h3>
               <p style={{ fontSize: "1rem" }}>
-                All the events of the day will be hosted at Sunnyside Estate.
-                Food and drinks will be provided between the ceremony and the
-                reception, so there is no need to leave the estate prior to the
-                reception.
+                All the events of the day will be hosted at Sunnyside Estate,
+                which is less than an hours drive from Melbourne. Food and
+                drinks will be provided between the ceremony and the reception,
+                so there is no need to leave the estate prior to the reception.
               </p>
             </div>
             <div style={{ color: "#FFFFFF" }}>
@@ -665,9 +1048,8 @@ export default function Home() {
                 Transport
               </h3>
               <p style={{ fontSize: "1rem" }}>
-                The estate is less than an hour from Melbourne, so you are able
-                to drive or organise a car service like taxi or uber to get you
-                back to Melbourne the night of the wedding. We encourage you to
+                You are able to drive or organise a car service like taxi or
+                uber to get you to and from the wedding. We encourage you to
                 book ahead of time so that there are enough ride shares in the
                 area for all our guests.
               </p>
@@ -694,402 +1076,300 @@ export default function Home() {
           RSVP
         </div>
 
-        {success === "" && (
-          <div style={{ fontSize: "1rem", color: "#2B1105" }}>
-            Please RSVP by the 1st of August.
-          </div>
-        )}
-        {success !== "" && (
-          <p className="text-green-700">
-            Thank you for your RSVP. We look forward to seeing you on our
-            special day.
-          </p>
-        )}
-        <form>
-          <div className="mt-8 mb-4">
-            <label
-              className="block text-gray-700 font-bold mb-2"
-              htmlFor="mobile-number"
+        {currentStep === "search" && (
+          <>
+            <div
+              style={{
+                fontSize: "1rem",
+                color: "#2B1105",
+                marginBottom: "2rem",
+              }}
             >
-              Mobile number*
-            </label>
-            <Input
-              className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              type="text"
-              onChange={(value) => setMobileNumber(value)}
-              value={mobileNumber}
-            />
-          </div>
-          <div className="mt-4 mb-4">
-            <label
-              className="block text-gray-700 font-bold mb-2"
-              htmlFor="mobile-number"
-            >
-              Email
-            </label>
-            <Input
-              className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              type="text"
-              onChange={(value) => setEmail(value)}
-              value={email}
-            />
-          </div>
-          <div className="grid grid-cols-2">
-            <div className="col-span-1 mr-1">
-              <label
-                className="block text-gray-700 font-bold"
-                htmlFor="first-name"
-              >
-                First name*
+              Please RSVP by the 1st of December.
+            </div>
+            <div className="mb-4">
+              <label className="block text-gray-700 font-bold mb-2">
+                Full Name*
               </label>
               <Input
                 className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 type="text"
-                onChange={(value) => setFirstName(value)}
-                value={firstName}
+                onChange={(value) => setSearchName(value)}
+                value={typeof searchName === "string" ? searchName : ""}
+                placeholder="Enter your full name"
               />
             </div>
-            <div className="col-span-1 ml-1">
-              <label
-                htmlFor="lastName"
-                className="mb-2 font-semibold text-gray-600"
-              >
-                Last name*
-              </label>
-              <Input
-                className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                type="text"
-                onChange={(value) => setLastName(value)}
-                value={lastName}
-              />
-            </div>
-          </div>
-          <div className="flex flex-col my-4 ">
-            <label
-              className="block text-gray-700 font-bold"
-              htmlFor="mobile-number"
+            <button
+              onClick={handleSearch}
+              disabled={
+                !searchName ||
+                typeof searchName !== "string" ||
+                !searchName.trim()
+              }
+              className="px-6 py-2 text-white font-semibold transition duration-150 ease-in-out shadow-md"
+              style={{
+                backgroundColor:
+                  searchName &&
+                  typeof searchName === "string" &&
+                  searchName.trim()
+                    ? "#BFDACC"
+                    : "#E5E5E5",
+                color:
+                  searchName &&
+                  typeof searchName === "string" &&
+                  searchName.trim()
+                    ? "#729A90"
+                    : "#999",
+                padding: "0.5rem 1.5rem",
+                border: "none",
+                cursor:
+                  searchName &&
+                  typeof searchName === "string" &&
+                  searchName.trim()
+                    ? "pointer"
+                    : "not-allowed",
+                opacity:
+                  searchName &&
+                  typeof searchName === "string" &&
+                  searchName.trim()
+                    ? 1
+                    : 0.5,
+              }}
             >
-              Dietary requirements - if any
-            </label>
-            <Input
-              className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              type="text"
-              onChange={(value) => setDietaryRequirement(value)}
-              value={dietaryRequirement}
-            />
-          </div>
-          <div className="flex flex-col mb-4">
-            <label
-              htmlFor="additionalGuests"
-              className="mb-2 font-semibold text-gray-600"
-            >
-              Number of additional guests (excluding yourself)*
-            </label>
-            <div className="flex flex-row justify-start items-center">
-              {[0, 1, 2, 3, 4, 5].map((option) => (
-                <label key={option} className="inline-flex items-center mx-2">
-                  <input
-                    type="radio"
-                    className="form-radio h-4 w-4 text-green-700 checked:bg-green-700 transition duration-150 ease-in-out"
-                    name="additionalGuests"
-                    value={option}
-                    checked={additionalGuests === option.toString()}
-                    onChange={handleAdditionalGuestsChange}
-                  />
-                  <span className="ml-2 text-gray-700">{option}</span>
-                </label>
-              ))}
-            </div>
-          </div>
-          {additionalGuests !== "" && additionalGuests !== "0" && (
-            <>
-              <div className="grid grid-cols-2">
-                <div className="col-span-1 mr-1">
-                  <label
-                    className="block text-gray-700 font-bold"
-                    htmlFor="first-name"
-                  >
-                    First name*
-                  </label>
-                  <Input
-                    className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    type="text"
-                    onChange={(value) => setFirstNameAG1(value)}
-                    value={firstNameAG1}
-                  />
-                </div>
-                <div className="col-span-1 ml-1">
-                  <label
-                    htmlFor="lastName"
-                    className="mb-2 font-semibold text-gray-600"
-                  >
-                    Last name*
-                  </label>
-                  <Input
-                    className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    type="text"
-                    onChange={(value) => setLastNameAG1(value)}
-                    value={lastNameAG1}
-                  />
-                </div>
-              </div>
-              <div className="flex flex-col my-4 ">
-                <label
-                  className="block text-gray-700 font-bold"
-                  htmlFor="mobile-number"
-                >
-                  Dietary requirements - if any
-                </label>
-                <Input
-                  className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  type="text"
-                  onChange={(value) => setDietaryRequirementAG1(value)}
-                  value={dietaryRequirementAG1}
-                />
-              </div>
-            </>
-          )}
-          {additionalGuests !== "" &&
-            additionalGuests !== "0" &&
-            additionalGuests !== "1" && (
-              <>
-                <div className="grid grid-cols-2">
-                  <div className="col-span-1 mr-1">
-                    <label
-                      className="block text-gray-700 font-bold"
-                      htmlFor="first-name"
-                    >
-                      First name*
-                    </label>
-                    <Input
-                      className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      type="text"
-                      onChange={(value) => setFirstNameAG2(value)}
-                      value={firstNameAG2}
-                    />
-                  </div>
-                  <div className="col-span-1 ml-1">
-                    <label
-                      htmlFor="lastName"
-                      className="mb-2 font-semibold text-gray-600"
-                    >
-                      Last name*
-                    </label>
-                    <Input
-                      className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      type="text"
-                      onChange={(value) => setLastNameAG2(value)}
-                      value={lastNameAG2}
-                    />
-                  </div>
-                </div>
-                <div className="flex flex-col my-4 ">
-                  <label
-                    className="block text-gray-700 font-bold"
-                    htmlFor="mobile-number"
-                  >
-                    Dietary requirements - if any
-                  </label>
-                  <Input
-                    className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    type="text"
-                    onChange={(value) => setDietaryRequirementAG2(value)}
-                    value={dietaryRequirementAG2}
-                  />
-                </div>
-              </>
-            )}
-          {additionalGuests !== "" &&
-            additionalGuests !== "0" &&
-            additionalGuests !== "1" &&
-            additionalGuests !== "2" && (
-              <>
-                <div className="grid grid-cols-2">
-                  <div className="col-span-1 mr-1">
-                    <label
-                      className="block text-gray-700 font-bold"
-                      htmlFor="first-name"
-                    >
-                      First name*
-                    </label>
-                    <Input
-                      className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      type="text"
-                      onChange={(value) => setFirstNameAG3(value)}
-                      value={firstNameAG3}
-                    />
-                  </div>
-                  <div className="col-span-1 ml-1">
-                    <label
-                      htmlFor="lastName"
-                      className="mb-2 font-semibold text-gray-600"
-                    >
-                      Last name*
-                    </label>
-                    <Input
-                      className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      type="text"
-                      onChange={(value) => setLastNameAG3(value)}
-                      value={lastNameAG3}
-                    />
-                  </div>
-                </div>
-                <div className="flex flex-col my-4 ">
-                  <label
-                    className="block text-gray-700 font-bold"
-                    htmlFor="mobile-number"
-                  >
-                    Dietary requirements - if any
-                  </label>
-                  <Input
-                    className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    type="text"
-                    onChange={(value) => setDietaryRequirementAG3(value)}
-                    value={dietaryRequirementAG3}
-                  />
-                </div>
-              </>
-            )}
-          {additionalGuests !== "" &&
-            additionalGuests !== "0" &&
-            additionalGuests !== "1" &&
-            additionalGuests !== "2" &&
-            additionalGuests !== "3" && (
-              <>
-                <div className="grid grid-cols-2">
-                  <div className="col-span-1 mr-1">
-                    <label
-                      className="block text-gray-700 font-bold"
-                      htmlFor="first-name"
-                    >
-                      First name*
-                    </label>
-                    <Input
-                      className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      type="text"
-                      onChange={(value) => setFirstNameAG4(value)}
-                      value={firstNameAG4}
-                    />
-                  </div>
-                  <div className="col-span-1 ml-1">
-                    <label
-                      htmlFor="lastName"
-                      className="mb-2 font-semibold text-gray-600"
-                    >
-                      Last name*
-                    </label>
-                    <Input
-                      className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      type="text"
-                      onChange={(value) => setLastNameAG4(value)}
-                      value={lastNameAG4}
-                    />
-                  </div>
-                </div>
-                <div className="flex flex-col my-4 ">
-                  <label
-                    className="block text-gray-700 font-bold"
-                    htmlFor="mobile-number"
-                  >
-                    Dietary requirements - if any
-                  </label>
-                  <Input
-                    className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    type="text"
-                    onChange={(value) => setDietaryRequirementAG4(value)}
-                    value={dietaryRequirementAG4}
-                  />
-                </div>
-              </>
-            )}
-          {additionalGuests === "5" && (
-            <>
-              <div className="grid grid-cols-2">
-                <div className="col-span-1 mr-1">
-                  <label
-                    className="block text-gray-700 font-bold"
-                    htmlFor="first-name"
-                  >
-                    First name*
-                  </label>
-                  <Input
-                    className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    type="text"
-                    onChange={(value) => setFirstNameAG5(value)}
-                    value={firstNameAG5}
-                  />
-                </div>
-                <div className="col-span-1 ml-1">
-                  <label
-                    htmlFor="lastName"
-                    className="mb-2 font-semibold text-gray-600"
-                  >
-                    Last name*
-                  </label>
-                  <Input
-                    className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    type="text"
-                    onChange={(value) => setLastNameAG5(value)}
-                    value={lastNameAG5}
-                  />
-                </div>
-              </div>
-              <div className="flex flex-col my-4 ">
-                <label
-                  className="block text-gray-700 font-bold"
-                  htmlFor="mobile-number"
-                >
-                  Dietary requirements - if any
-                </label>
-                <Input
-                  className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  type="text"
-                  onChange={(value) => setDietaryRequirementAG5(value)}
-                  value={dietaryRequirementAG5}
-                />
-              </div>
-            </>
-          )}
-          <div className="flex flex-col mb-4">
-            <span className="mb-2 font-semibold text-gray-600">
-              Attendance status*
-            </span>
-            <div className="flex flex-row justify-start items-center">
-              <label className="inline-flex items-center mx-2">
-                <input
-                  type="radio"
-                  className="form-radio h-4 w-4 text-green-700 transition duration-150 ease-in-out checked:bg-green-700"
-                  name="acceptance"
-                  value="acceptWithPleasure"
-                  checked={attendanceStatus === "acceptWithPleasure"}
-                  onChange={handleAttendanceChange}
-                />
-                <span className="ml-2 text-gray-700">Accept with pleasure</span>
-              </label>
-              <label className="inline-flex items-center mx-2">
-                <input
-                  type="radio"
-                  className="form-radio h-4 w-4 text-green-700 transition duration-150 ease-in-out checked:bg-green-700"
-                  name="acceptance"
-                  value="regretfullyDecline"
-                  checked={attendanceStatus === "regretfullyDecline"}
-                  onChange={handleAttendanceChange}
-                />
-                <span className="ml-2 text-gray-700">Regretfully decline</span>
-              </label>
-            </div>
-          </div>
+              Search
+            </button>
+          </>
+        )}
 
-          <div className="flex items-center justify-center">
-            {mobileNumber !== "" &&
-            firstName !== "" &&
-            lastName !== "" &&
-            additionalGuests !== "" &&
-            attendanceStatus !== "" ? (
+        {currentStep === "confirm" && foundGroup && (
+          <>
+            <div
+              style={{
+                fontSize: "1rem",
+                color: "#2B1105",
+                marginBottom: "2rem",
+              }}
+            >
+              Is this you?
+            </div>
+            <div
+              onClick={() => handleGroupSelect(foundGroup)}
+              className="p-4 border-2 border-gray-300 rounded cursor-pointer hover:border-gray-400 transition-colors"
+              style={{ backgroundColor: "#F5F5F0" }}
+            >
+              <h3 className="font-semibold text-lg mb-2">{foundGroup.group}</h3>
+              <div className="space-y-1">
+                {foundGroup.members.map((member: any, index: number) => (
+                  <div key={index} className="text-gray-700">
+                    {member.name}
+                  </div>
+                ))}
+              </div>
+            </div>
+            <button
+              onClick={() => setCurrentStep("search")}
+              className="mt-4 text-gray-600 underline"
+            >
+              Not you? Search again
+            </button>
+          </>
+        )}
+
+        {currentStep === "details" && selectedGroup && (
+          <form>
+            {/* Edit Prompt for Resubmissions */}
+            {showEditPrompt && (
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 mb-6">
+                <h3 className="text-lg font-semibold text-yellow-800 mb-4">
+                  You've already submitted an RSVP for this group.
+                </h3>
+                <p className="text-yellow-700 mb-4">
+                  Would you like to edit your previous response?
+                </p>
+                <div className="flex gap-4">
+                  <button
+                    type="button"
+                    onClick={() => handleEditResponse(true)}
+                    className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+                  >
+                    Yes, Edit My Response
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleEditResponse(false)}
+                    className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700"
+                  >
+                    No, Keep Original
+                  </button>
+                </div>
+              </div>
+            )}
+            <div
+              style={{
+                fontSize: "1rem",
+                color: "#2B1105",
+                marginBottom: "2rem",
+              }}
+            >
+              RSVP for {selectedGroup.group}
+            </div>
+
+            {selectedGroup.members.map((member: any, index: number) => (
+              <div
+                key={index}
+                className="mb-6 p-4 border rounded"
+                style={{ backgroundColor: "#F5F5F0" }}
+              >
+                <div className="flex items-center justify-between mb-3">
+                  {editingName === member.name ? (
+                    <div className="flex items-center gap-2 flex-1">
+                      <Input
+                        className="appearance-none border rounded py-1 px-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline flex-1"
+                        type="text"
+                        onChange={(value) => setEditedName(value)}
+                        value={editedName}
+                        placeholder="Enter name"
+                      />
+                      <button
+                        onClick={handleSaveNameEdit}
+                        className="px-3 py-1 bg-green-600 text-white text-sm rounded hover:bg-green-700"
+                      >
+                        Save
+                      </button>
+                      <button
+                        onClick={handleCancelNameEdit}
+                        className="px-3 py-1 bg-gray-500 text-white text-sm rounded hover:bg-gray-600"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  ) : (
+                    <>
+                      <h4 className="font-semibold text-lg">{member.name}</h4>
+                      <button
+                        onClick={() => handleEditName(member.name)}
+                        className="text-green-700 text-sm underline hover:text-green-800"
+                      >
+                        Edit spelling
+                      </button>
+                    </>
+                  )}
+                </div>
+
+                {/* Attendance Status */}
+                <div className="mb-4">
+                  <span className="block text-gray-700 font-bold mb-2">
+                    Attendance*
+                  </span>
+                  <div className="flex gap-4">
+                    <label className="inline-flex items-center">
+                      <input
+                        type="radio"
+                        className="form-radio h-4 w-4 text-green-700"
+                        name={`attendance_${member.name}`}
+                        value="attending"
+                        checked={attendanceStatus[member.name] === "attending"}
+                        onChange={(e) =>
+                          handleAttendanceChange(member.name, e.target.value)
+                        }
+                      />
+                      <span className="ml-2 text-gray-700">Attending</span>
+                    </label>
+                    <label className="inline-flex items-center">
+                      <input
+                        type="radio"
+                        className="form-radio h-4 w-4 text-green-700"
+                        name={`attendance_${member.name}`}
+                        value="not_attending"
+                        checked={
+                          attendanceStatus[member.name] === "not_attending"
+                        }
+                        onChange={(e) =>
+                          handleAttendanceChange(member.name, e.target.value)
+                        }
+                      />
+                      <span className="ml-2 text-gray-700">Not Attending</span>
+                    </label>
+                  </div>
+                </div>
+
+                {/* Mobile Number (only if attending) */}
+                {attendanceStatus[member.name] === "attending" && (
+                  <div className="mb-4">
+                    <label className="block text-gray-700 font-bold mb-2">
+                      Mobile Number
+                    </label>
+                    <Input
+                      className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      type="tel"
+                      onChange={(value) =>
+                        handleMobileChange(member.name, value)
+                      }
+                      value={mobileNumbers[member.name] || "04"}
+                      placeholder="04"
+                    />
+                  </div>
+                )}
+
+                {/* Dietary Requirements (only if attending) */}
+                {attendanceStatus[member.name] === "attending" && (
+                  <div className="mb-4">
+                    <label className="block text-gray-700 font-bold mb-2">
+                      Dietary Requirements* (select all that apply)
+                    </label>
+                    <div className="space-y-2">
+                      {dietaryOptions.map((option) => (
+                        <label key={option} className="flex items-center">
+                          <input
+                            type="checkbox"
+                            className="form-checkbox h-4 w-4 text-green-700"
+                            checked={(
+                              dietaryRequirements[member.name] || []
+                            ).includes(option)}
+                            onChange={() => {
+                              const currentDietary =
+                                dietaryRequirements[member.name] || [];
+                              const newDietary = currentDietary.includes(option)
+                                ? currentDietary.filter(
+                                    (item) => item !== option
+                                  )
+                                : [...currentDietary, option];
+
+                              setDietaryRequirements((prev) => ({
+                                ...prev,
+                                [member.name]: newDietary,
+                              }));
+                            }}
+                          />
+                          <span className="ml-2 text-gray-700">{option}</span>
+                        </label>
+                      ))}
+                    </div>
+
+                    {(dietaryRequirements[member.name] || []).includes(
+                      "Other"
+                    ) && (
+                      <Input
+                        className="mt-2 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        type="text"
+                        onChange={(value) =>
+                          handleCustomDietaryChange(member.name, value)
+                        }
+                        value={customDietary[member.name] || ""}
+                        placeholder="Please specify dietary requirements"
+                        required
+                      />
+                    )}
+                  </div>
+                )}
+              </div>
+            ))}
+
+            <div className="flex items-center justify-center mt-6">
               <button
                 type="submit"
-                onClick={(event) => submitForm(event)}
-                className="px-6 py-2 text-white font-semibold transition duration-150 ease-in-out shadow-md hover:bg-green-700 focus:outline-none focus:shadow-outline-blue active:bg-green-700"
+                onClick={submitForm}
+                className="px-6 py-2 text-white font-semibold transition duration-150 ease-in-out shadow-md"
                 style={{
                   backgroundColor: "#BFDACC",
                   color: "#729A90",
@@ -1097,35 +1377,40 @@ export default function Home() {
                   border: "none",
                 }}
               >
-                Submit
+                Submit RSVP
               </button>
-            ) : (
-              <button
-                disabled
-                type="submit"
-                onClick={(event) => submitForm(event)}
-                className="px-6 py-2 text-white font-semibold transition duration-150 ease-in-out shadow-md hover:bg-green-700 focus:outline-none focus:shadow-outline-blue active:bg-gray-700"
-                style={{
-                  backgroundColor: "#BFDACC",
-                  color: "#729A90",
-                  padding: "0.5rem 1.5rem",
-                  border: "none",
-                  cursor: "not-allowed",
-                  opacity: 0.5,
-                }}
-              >
-                Submit
-              </button>
-            )}
+            </div>
+          </form>
+        )}
 
-            {error !== "" && (
-              <p className="text-red-700">
-                We were unable to submit your RSVP. Please review your form
-                inputs.
-              </p>
-            )}
+        {currentStep === "complete" && (
+          <div className="text-center">
+            <p className="text-green-700 text-lg mb-4">
+              Thank you for your RSVP! We look forward to seeing you on our
+              special day.
+            </p>
+            <button
+              onClick={resetForm}
+              className="px-6 py-2 text-white font-semibold transition duration-150 ease-in-out shadow-md"
+              style={{
+                backgroundColor: "#BFDACC",
+                color: "#729A90",
+                padding: "0.5rem 1.5rem",
+                border: "none",
+              }}
+            >
+              Submit Another RSVP
+            </button>
           </div>
-        </form>
+        )}
+
+        {error && (
+          <div className="mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+            {typeof error === "string"
+              ? error
+              : `Error: ${JSON.stringify(error)}`}
+          </div>
+        )}
       </div>
     </main>
   );
