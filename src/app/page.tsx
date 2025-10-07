@@ -905,7 +905,7 @@ export default function Home() {
                   lineHeight: "1.6",
                 }}
               >
-                Cocktails and canapés
+                Open bar and canapés.
               </div>
             </div>
 
@@ -1038,7 +1038,7 @@ export default function Home() {
                 lineHeight: "1.6",
               }}
             >
-              Cocktails and canapés
+              Open bar and canapés.
             </div>
           </div>
 
