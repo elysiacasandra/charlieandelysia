@@ -283,6 +283,28 @@ export default function Home() {
     }
   }, []);
 
+  // Scroll reveal animation
+  useEffect(() => {
+    const revealElements = document.querySelectorAll(".reveal");
+
+    const handleScroll = () => {
+      revealElements.forEach((element) => {
+        const elementTop = element.getBoundingClientRect().top;
+        const elementBottom = element.getBoundingClientRect().bottom;
+        const windowHeight = window.innerHeight;
+
+        if (elementTop < windowHeight * 0.85 && elementBottom > 0) {
+          element.classList.add("active");
+        }
+      });
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    handleScroll(); // Initial check
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [currentStep]);
+
   const scrollToRsvp = () => {
     const element = document.getElementById("rsvp");
     if (element) {
@@ -378,7 +400,15 @@ export default function Home() {
     setSelectedGroup(group);
 
     // Check for existing submission using the searched name
-    const hasExisting = await checkExistingSubmission(group.id, searchName);
+    const nameToCheck = typeof searchName === "string" ? searchName : "";
+    console.log(
+      "Checking existing submission for:",
+      nameToCheck,
+      "in group:",
+      group.id
+    );
+    const hasExisting = await checkExistingSubmission(group.id, nameToCheck);
+    console.log("Has existing submission:", hasExisting);
     setExistingSubmission(hasExisting);
 
     // If there's an existing submission, show the edit prompt in the confirm step
@@ -634,44 +664,30 @@ export default function Home() {
   };
 
   return (
-    <main className="flex min-h-screen flex-col justify-between overflow-x-hidden">
+    <main
+      className="flex min-h-screen flex-col justify-between overflow-x-hidden"
+      style={{ backgroundColor: "#FFFFFF" }}
+    >
       <div>
         <div className="h-screen">
-          <div className="md:hidden">
-            <video
-              src="/Video-453.mov"
-              autoPlay
-              muted
-              playsInline
-              loop
-              style={{
-                width: "100vw",
-                height: "100vh",
-                objectFit: "cover",
-                objectPosition: "center",
-                position: "absolute",
-                top: 0,
-                left: 0,
-              }}
-            >
-              <source src="video.mov" type="video/mov" />
-            </video>
-          </div>
-          <div className="hidden md:block">
-            <img
-              src="/fig.jpg"
-              alt="Background"
-              style={{
-                width: "100vw",
-                height: "100vh",
-                objectFit: "cover",
-                objectPosition: "center",
-                position: "absolute",
-                top: 0,
-                left: 0,
-              }}
-            />
-          </div>
+          <video
+            src="/Video-453.mov"
+            autoPlay
+            muted
+            playsInline
+            loop
+            style={{
+              width: "100vw",
+              height: "100vh",
+              objectFit: "cover",
+              objectPosition: "center",
+              position: "absolute",
+              top: 0,
+              left: 0,
+            }}
+          >
+            <source src="video.mov" type="video/mov" />
+          </video>
           <div
             style={{
               position: "absolute",
@@ -683,295 +699,232 @@ export default function Home() {
             }}
           >
             <div
+              className="animate-fade-in"
               style={{
-                fontSize: "clamp(2rem, 8vw, 3rem)",
+                fontSize: "clamp(3rem, 10vw, 8rem)",
                 marginBottom: "0.5rem",
+                fontFamily: "var(--font-serif)",
                 fontWeight: "400",
+                letterSpacing: "-0.03em",
                 whiteSpace: "nowrap",
+                lineHeight: "1",
               }}
             >
-              Charlie & Elysia
+              charlie & elysia
             </div>
             <div
+              className="animate-fade-in animate-delay-200"
               style={{
-                fontSize: "1.2rem",
+                fontSize: "clamp(1rem, 2vw, 1.5rem)",
+                fontFamily: "var(--font-sans)",
                 fontWeight: "300",
-                fontStyle: "italic",
+                letterSpacing: "0.15em",
+                textTransform: "uppercase",
+                marginBottom: "1.5rem",
               }}
             >
               a decade distilled
             </div>
             <div
+              className="animate-fade-in animate-delay-400"
               onClick={scrollToRsvp}
               style={{
-                fontSize: "1rem",
+                fontSize: "0.875rem",
+                fontFamily: "var(--font-sans)",
                 fontWeight: "400",
-                marginTop: "2rem",
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+                marginTop: "0",
                 cursor: "pointer",
-                textDecoration: "underline",
-                textDecorationThickness: "1px",
-                textUnderlineOffset: "4px",
-                transition: "all 0.3s ease",
-                opacity: 0.9,
+                position: "relative",
+                display: "inline-block",
+                transition: "all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1)",
+                border: "1px solid #FFFFFF",
+                borderRadius: "50px",
+                padding: "0.75rem 2.5rem",
               }}
               onMouseEnter={(e) => {
                 const target = e.target as HTMLElement;
-                target.style.opacity = "1";
-                target.style.textDecorationThickness = "2px";
+                target.style.backgroundColor = "#FFFFFF";
+                target.style.color = "#1C1C1C";
               }}
               onMouseLeave={(e) => {
                 const target = e.target as HTMLElement;
-                target.style.opacity = "0.9";
-                target.style.textDecorationThickness = "1px";
+                target.style.backgroundColor = "transparent";
+                target.style.color = "#FFFFFF";
               }}
             >
-              RSVP
+              rsvp
             </div>
           </div>
         </div>
       </div>
       <div
         id="itinerary"
-        className="py-16"
+        className="min-h-screen"
         style={{
-          height: "33%",
-          backgroundColor: "#F5F5F0",
+          backgroundColor: "#F5F5F2",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
+          padding: "3rem 1rem",
         }}
       >
-        <div className="" style={{ fontSize: "3rem", color: "#2B1105" }}>
-          Itinerary
+        <div
+          className="reveal"
+          style={{
+            fontSize: "clamp(2.5rem, 6vw, 4.5rem)",
+            color: "#1C1C1C",
+            fontFamily: "var(--font-serif)",
+            fontWeight: "400",
+            letterSpacing: "-0.02em",
+            textAlign: "center",
+            marginBottom: "1.5rem",
+          }}
+        >
+          itinerary
         </div>
         <div
-          className=""
-          style={{ fontSize: "1rem", color: "#2B1105", textAlign: "center" }}
+          style={{
+            fontSize: "0.875rem",
+            color: "#1C1C1C",
+            textAlign: "center",
+            fontFamily: "var(--font-sans)",
+            letterSpacing: "0.1em",
+            textTransform: "uppercase",
+            fontWeight: "400",
+            marginBottom: "2rem",
+          }}
         >
-          <p>THE FOURTEENTH OF FEBRUARY TWO THOUSAND AND TWENTY SIX</p>
-          <p>SUNNYSIDE ESTATE</p>
-          <p>1 SUNNYSIDE RD, MOUNT ELIZA, VIC</p>
+          <p
+            className="reveal"
+            style={{ marginBottom: "0.25rem", color: "#777777" }}
+          >
+            14 february 2026
+          </p>
+          <p
+            className="reveal animate-delay-100"
+            style={{ marginBottom: "0.25rem", color: "#777777" }}
+          >
+            sunnyside estate
+          </p>
+          <p className="reveal animate-delay-200" style={{ color: "#777777" }}>
+            1 sunnyside rd, mount eliza, vic
+          </p>
         </div>
-        <div className="hidden md:block">
-          <div style={{ display: "flex", marginTop: "2rem" }}>
+        <div
+          className="px-6"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "2.5rem",
+            marginTop: "2rem",
+          }}
+        >
+          <div>
             <div
-              className=""
+              className="reveal"
               style={{
-                fontSize: "1.5rem",
-                marginRight: "35rem",
-                color: "#686a4f",
+                fontSize: "0.875rem",
+                color: "#3E5C3C",
+                fontFamily: "var(--font-sans)",
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+                marginBottom: "0.75rem",
               }}
             >
               4pm
             </div>
-            <div>
-              <div
-                style={{
-                  fontSize: "1.5rem",
-                  color: "#2B1105",
-                  marginLeft: "-25rem",
-                }}
-              >
-                Ceremony
-              </div>
-              <div
-                style={{
-                  fontSize: "1rem",
-                  color: "#2B1105",
-                  marginLeft: "-25rem",
-                }}
-              >
-                Please arrive at 3:45pm so there is time to walk to the Manor
-                Gardens and find your seat.
-              </div>
+            <div
+              className="reveal animate-delay-100"
+              style={{
+                fontSize: "1.75rem",
+                color: "#1C1C1C",
+                fontFamily: "var(--font-sans)",
+                fontWeight: "300",
+                marginBottom: "1rem",
+              }}
+            >
+              Ceremony
+            </div>
+            <div
+              className="reveal animate-delay-200"
+              style={{
+                fontSize: "1rem",
+                color: "#777777",
+                fontFamily: "var(--font-sans)",
+                fontWeight: "300",
+                lineHeight: "1.7",
+              }}
+            >
+              Please arrive at 3:45pm.
             </div>
           </div>
-          <div style={{ display: "flex", marginTop: "2rem" }}>
+          <div>
             <div
+              className="reveal"
               style={{
-                fontSize: "1.5rem",
-                marginRight: "35rem",
-                color: "#686a4f",
+                fontSize: "0.875rem",
+                color: "#3E5C3C",
+                fontFamily: "var(--font-sans)",
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+                marginBottom: "0.75rem",
               }}
             >
               5pm
             </div>
-            <div>
-              <div
-                style={{
-                  fontSize: "1.5rem",
-                  color: "#2B1105",
-                  marginLeft: "-25rem",
-                }}
-              >
-                Meze & Drinks
-              </div>
-              <div
-                style={{
-                  fontSize: "1rem",
-                  color: "#2B1105",
-                  marginLeft: "-25rem",
-                }}
-              >
-                Let us break bread together beneath the late afternoon sun -
-                with flowing wine, live music, and good company.
-              </div>
+            <div
+              className="reveal animate-delay-100"
+              style={{
+                fontSize: "1.75rem",
+                color: "#1C1C1C",
+                fontFamily: "var(--font-sans)",
+                fontWeight: "300",
+                marginBottom: "1rem",
+              }}
+            >
+              Meze & Drinks
             </div>
           </div>
-          <div style={{ display: "flex", marginTop: "2rem" }}>
+          <div>
             <div
+              className="reveal"
               style={{
-                fontSize: "1.5rem",
-                marginRight: "35rem",
-                color: "#686a4f",
+                fontSize: "0.875rem",
+                color: "#3E5C3C",
+                fontFamily: "var(--font-sans)",
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+                marginBottom: "0.75rem",
               }}
             >
               7pm
             </div>
-            <div>
-              <div
-                style={{
-                  fontSize: "1.5rem",
-                  color: "#2B1105",
-                  marginLeft: "-25rem",
-                }}
-              >
-                Reception
-              </div>
-              <div
-                style={{
-                  fontSize: "1rem",
-                  color: "#2B1105",
-                  marginLeft: "-25rem",
-                }}
-              >
-                A night of feasting and celebration, concluding at midnight.
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="md:hidden">
-          <div style={{ display: "flex", marginTop: "2rem" }}>
             <div
-              className=""
+              className="reveal animate-delay-100"
               style={{
-                fontSize: "1.5rem",
-                marginLeft: "35rem",
-                color: "#729A90",
+                fontSize: "1.75rem",
+                color: "#1C1C1C",
+                fontFamily: "var(--font-sans)",
+                fontWeight: "300",
+                marginBottom: "1rem",
               }}
-            ></div>
-            <div>
-              <div
-                className=""
-                style={{
-                  fontSize: "1.5rem",
-                  marginLeft: "-25rem",
-                  color: "#686a4f",
-                }}
-              >
-                4pm
-              </div>
-              <div
-                style={{
-                  fontSize: "1.5rem",
-                  color: "#2B1105",
-                  marginLeft: "-25rem",
-                }}
-              >
-                Ceremony
-              </div>
-              <div
-                style={{
-                  fontSize: "1rem",
-                  color: "#2B1105",
-                  marginLeft: "-25rem",
-                }}
-              >
-                Please arrive at 3:45pm so there is time to walk to the Manor
-                Gardens and find your seat.
-              </div>
+            >
+              Reception
             </div>
-          </div>
-          <div style={{ display: "flex", marginTop: "2rem" }}>
             <div
-              className=""
+              className="reveal animate-delay-200"
               style={{
-                fontSize: "1.5rem",
-                marginLeft: "35rem",
-                color: "#729A90",
+                fontSize: "1rem",
+                color: "#777777",
+                fontFamily: "var(--font-sans)",
+                fontWeight: "300",
+                lineHeight: "1.7",
               }}
-            ></div>
-            <div>
-              <div
-                className=""
-                style={{
-                  fontSize: "1.5rem",
-                  marginLeft: "-25rem",
-                  color: "#686a4f",
-                }}
-              >
-                5pm
-              </div>
-              <div
-                style={{
-                  fontSize: "1.5rem",
-                  color: "#2B1105",
-                  marginLeft: "-25rem",
-                }}
-              >
-                Meze & Drinks
-              </div>
-              <div
-                style={{
-                  fontSize: "1rem",
-                  color: "#2B1105",
-                  marginLeft: "-25rem",
-                }}
-              >
-                Let us break bread together - with flowing wine, live music, and
-                good company.
-              </div>
-            </div>
-          </div>
-          <div style={{ display: "flex", marginTop: "2rem" }}>
-            <div
-              className=""
-              style={{
-                fontSize: "1.5rem",
-                marginLeft: "35rem",
-                color: "#729A90",
-              }}
-            ></div>
-            <div>
-              <div
-                className=""
-                style={{
-                  fontSize: "1.5rem",
-                  marginLeft: "-25rem",
-                  color: "#686a4f",
-                }}
-              >
-                7pm
-              </div>
-              <div
-                style={{
-                  fontSize: "1.5rem",
-                  color: "#2B1105",
-                  marginLeft: "-25rem",
-                }}
-              >
-                Reception
-              </div>
-              <div
-                style={{
-                  fontSize: "1rem",
-                  color: "#2B1105",
-                  marginLeft: "-25rem",
-                }}
-              >
-                A night of celebration, concluding at midnight.
-              </div>
+            >
+              Concluding at midnight.
             </div>
           </div>
         </div>
@@ -980,31 +933,56 @@ export default function Home() {
         <div
           id="venue"
           style={{
-            // backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.35)), url('/jake&taylor.png')`,
-            backgroundPosition: "top",
-            backgroundSize: "cover",
+            minHeight: "50vh",
+            backgroundColor: "#F5F5F2",
             display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
             flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "6rem 1.5rem",
           }}
         >
           <div
             className="py-16 w-full"
             style={{ display: "flex", justifyContent: "center", width: "90%" }}
           >
-            <div style={{ color: "#2B1105", width: "60%" }}>
+            <div style={{ color: "#1C1C1C", width: "60%" }}>
+              <img
+                src="/IMG_8807.JPG"
+                alt="Venue"
+                style={{
+                  width: "100%",
+                  height: "200px",
+                  objectFit: "cover",
+                  marginBottom: "2rem",
+                  borderRadius: "8px",
+                }}
+              />
               <h3
-                className="text-center"
-                style={{ fontSize: "2rem", marginBottom: "1rem" }}
+                className="text-center reveal"
+                style={{
+                  fontSize: "clamp(2rem, 4vw, 3rem)",
+                  marginBottom: "1.5rem",
+                  fontFamily: "var(--font-serif)",
+                  fontWeight: "400",
+                  letterSpacing: "-0.02em",
+                }}
               >
-                Venue
+                accomodation
               </h3>
-              <p className="text-center" style={{ fontSize: "1rem" }}>
-                All the events of the day will be hosted at Sunnyside Estate,
-                which is less than an hours drive from Melbourne. Food and
-                drinks will be provided between the ceremony and the reception,
-                so there is no need to leave the estate prior to the reception.
+              <p
+                className="text-center reveal animate-delay-100"
+                style={{
+                  fontSize: "1rem",
+                  fontFamily: "var(--font-sans)",
+                  fontWeight: "300",
+                  color: "#777777",
+                  lineHeight: "1.7",
+                }}
+              >
+                Sunnyside Estate is less than an hours drive from Melbourne.
+                Should you chose to book a hotel nearby for the wedding night,
+                we have been recommended Brooklands Hotel in Mornington.
               </p>
             </div>
           </div>
@@ -1012,18 +990,45 @@ export default function Home() {
             className="pb-16 w-full"
             style={{ display: "flex", justifyContent: "center", width: "90%" }}
           >
-            <div style={{ color: "#2B1105", width: "60%" }}>
+            <div style={{ color: "#1C1C1C", width: "60%" }}>
+              <img
+                src="/IMG_8811.JPG"
+                alt="Parking"
+                style={{
+                  width: "100%",
+                  height: "200px",
+                  objectFit: "cover",
+                  marginBottom: "2rem",
+                  borderRadius: "8px",
+                }}
+              />
               <h3
-                className="text-center"
-                style={{ fontSize: "2rem", marginBottom: "1rem" }}
+                className="text-center reveal"
+                style={{
+                  fontSize: "clamp(2rem, 4vw, 3rem)",
+                  marginBottom: "1.5rem",
+                  fontFamily: "var(--font-serif)",
+                  fontWeight: "400",
+                  letterSpacing: "-0.02em",
+                }}
               >
-                Parking
+                parking & transport
               </h3>
-              <p className="text-center" style={{ fontSize: "1rem" }}>
-                There are free and ample parking spaces on site. However, cars
-                are unable to be parked here overnight. Please park your car
+              <p
+                className="text-center reveal animate-delay-100"
+                style={{
+                  fontSize: "1rem",
+                  fontFamily: "var(--font-sans)",
+                  fontWeight: "300",
+                  color: "#777777",
+                  lineHeight: "1.7",
+                }}
+              >
+                There is free parking in the estate. Please park your car
                 outside the estate, on Sunnyside Rd, if you plan to leave it
-                overnight.
+                overnight. If you choose to rideshare, we encourage you to book
+                ahead of time so that there are enough vehicles in the area for
+                all our guests.
               </p>
             </div>
           </div>
@@ -1031,36 +1036,86 @@ export default function Home() {
             className="pb-16 w-full"
             style={{ display: "flex", justifyContent: "center", width: "90%" }}
           >
-            <div style={{ color: "#2B1105", width: "60%" }}>
+            <div style={{ color: "#1C1C1C", width: "60%" }}>
+              <img
+                src="/IMG_8806.JPG"
+                alt="Gifts"
+                style={{
+                  width: "100%",
+                  height: "200px",
+                  objectFit: "cover",
+                  marginBottom: "2rem",
+                  borderRadius: "8px",
+                }}
+              />
               <h3
-                className="text-center"
-                style={{ fontSize: "2rem", marginBottom: "1rem" }}
+                className="text-center reveal"
+                style={{
+                  fontSize: "clamp(2rem, 4vw, 3rem)",
+                  marginBottom: "1.5rem",
+                  fontFamily: "var(--font-serif)",
+                  fontWeight: "400",
+                  letterSpacing: "-0.02em",
+                }}
               >
-                Transport
+                gifts
               </h3>
-              <p className="text-center" style={{ fontSize: "1rem" }}>
-                You are able to drive or organise a car service like taxi or
-                uber to get you to and from the wedding. We encourage you to
-                book ahead of time so that there are enough ride shares in the
-                area for all our guests.
-              </p>
-            </div>
-          </div>
-          <div
-            className="pb-16 w-full"
-            style={{ display: "flex", justifyContent: "center", width: "90%" }}
-          >
-            <div style={{ color: "#2B1105", width: "60%" }}>
-              <h3
-                className="text-center"
-                style={{ fontSize: "2rem", marginBottom: "1rem" }}
+              <p
+                className="text-center reveal animate-delay-100"
+                style={{
+                  fontSize: "1rem",
+                  fontFamily: "var(--font-sans)",
+                  fontWeight: "300",
+                  color: "#777777",
+                  lineHeight: "1.7",
+                }}
               >
-                Gifts
-              </h3>
-              <p className="text-center" style={{ fontSize: "1rem" }}>
                 Your presence at our wedding is truly the greatest gift. However
                 should you wish to honour us further, a wishing well will be
                 present on the evening.
+              </p>
+            </div>
+          </div>
+          <div
+            className="pb-16 w-full"
+            style={{ display: "flex", justifyContent: "center", width: "90%" }}
+          >
+            <div style={{ color: "#1C1C1C", width: "60%" }}>
+              <img
+                src="/grapes.JPG"
+                alt="Children"
+                style={{
+                  width: "100%",
+                  height: "200px",
+                  objectFit: "cover",
+                  marginBottom: "2rem",
+                  borderRadius: "8px",
+                }}
+              />
+              <h3
+                className="text-center reveal"
+                style={{
+                  fontSize: "clamp(2rem, 4vw, 3rem)",
+                  marginBottom: "1.5rem",
+                  fontFamily: "var(--font-serif)",
+                  fontWeight: "400",
+                  letterSpacing: "-0.02em",
+                }}
+              >
+                children
+              </h3>
+              <p
+                className="text-center reveal animate-delay-100"
+                style={{
+                  fontSize: "1rem",
+                  fontFamily: "var(--font-sans)",
+                  fontWeight: "300",
+                  color: "#777777",
+                  lineHeight: "1.7",
+                }}
+              >
+                This event is for family and friends who are 12 years and older.
+                We appreciate your understanding.
               </p>
             </div>
           </div>
@@ -1070,90 +1125,304 @@ export default function Home() {
         <div
           id="venue1"
           style={{
-            // backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)), url('/theconti.jpeg')`,
-            backgroundPosition: "top",
-            backgroundSize: "cover",
+            backgroundColor: "#F5F5F2",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
             flexDirection: "column",
+            padding: "6rem 2rem",
           }}
         >
           <div
-            className="py-36 w-full"
+            className="w-full"
             style={{
               display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: "3rem",
-              width: "80%",
+              gridTemplateColumns: "1fr 1fr 1fr 1fr",
+              gap: "2rem",
+              width: "90%",
+              maxWidth: "1400px",
             }}
           >
-            <div style={{ color: "#FFFFFF" }}>
-              <h3 style={{ fontSize: "2rem", marginBottom: "1rem" }}>Venue</h3>
-              <p style={{ fontSize: "1rem" }}>
-                All the events of the day will be hosted at Sunnyside Estate,
-                which is less than an hours drive from Melbourne. Food and
-                drinks will be provided between the ceremony and the reception,
-                so there is no need to leave the estate prior to the reception.
+            <div style={{ color: "#1C1C1C" }}>
+              <img
+                src="/IMG_8807.JPG"
+                alt="Venue"
+                style={{
+                  width: "100%",
+                  height: "250px",
+                  objectFit: "cover",
+                  marginBottom: "1.5rem",
+                  borderRadius: "8px",
+                }}
+              />
+              <h3
+                className="reveal"
+                style={{
+                  fontSize: "1.5rem",
+                  marginBottom: "1rem",
+                  fontFamily: "var(--font-serif)",
+                  fontWeight: "400",
+                  letterSpacing: "-0.02em",
+                }}
+              >
+                accomodation
+              </h3>
+              <p
+                className="reveal animate-delay-100"
+                style={{
+                  fontSize: "0.875rem",
+                  fontFamily: "var(--font-sans)",
+                  fontWeight: "300",
+                  color: "#777777",
+                  lineHeight: "1.7",
+                }}
+              >
+                Sunnyside Estate is less than an hours drive from Melbourne.
+                Should you chose to book a hotel nearby for the wedding night,
+                we have been recommended Brooklands Hotel in Mornington.
               </p>
             </div>
-            <div style={{ color: "#FFFFFF" }}>
-              <h3 style={{ fontSize: "2rem", marginBottom: "1rem" }}>
-                Parking
+            <div style={{ color: "#1C1C1C" }}>
+              <img
+                src="/IMG_8811.JPG"
+                alt="Parking"
+                style={{
+                  width: "100%",
+                  height: "250px",
+                  objectFit: "cover",
+                  marginBottom: "1.5rem",
+                  borderRadius: "8px",
+                }}
+              />
+              <h3
+                className="reveal"
+                style={{
+                  fontSize: "1.5rem",
+                  marginBottom: "1rem",
+                  fontFamily: "var(--font-serif)",
+                  fontWeight: "400",
+                  letterSpacing: "-0.02em",
+                }}
+              >
+                parking & transport
               </h3>
-              <p style={{ fontSize: "1rem" }}>
-                There are free and ample parking spaces on site. However, cars
-                are unable to be parked here overnight. Please park your car
+              <p
+                className="reveal animate-delay-100"
+                style={{
+                  fontSize: "0.875rem",
+                  fontFamily: "var(--font-sans)",
+                  fontWeight: "300",
+                  color: "#777777",
+                  lineHeight: "1.7",
+                }}
+              >
+                There is free parking in the estate. Please park your car
                 outside the estate, on Sunnyside Rd, if you plan to leave it
-                overnight.
+                overnight. If you choose to rideshare, we encourage you to book
+                ahead of time so that there are enough vehicles in the area for
+                all our guests.
               </p>
             </div>
-            <div style={{ color: "#FFFFFF" }}>
-              <h3 style={{ fontSize: "2rem", marginBottom: "1rem" }}>
-                Transport
+            <div style={{ color: "#1C1C1C" }}>
+              <img
+                src="/IMG_8806.JPG"
+                alt="Gifts"
+                style={{
+                  width: "100%",
+                  height: "250px",
+                  objectFit: "cover",
+                  marginBottom: "1.5rem",
+                  borderRadius: "8px",
+                }}
+              />
+              <h3
+                className="reveal"
+                style={{
+                  fontSize: "1.5rem",
+                  marginBottom: "1rem",
+                  fontFamily: "var(--font-serif)",
+                  fontWeight: "400",
+                  letterSpacing: "-0.02em",
+                }}
+              >
+                gifts
               </h3>
-              <p style={{ fontSize: "1rem" }}>
-                You are able to drive or organise a car service like taxi or
-                uber to get you to and from the wedding. We encourage you to
-                book ahead of time so that there are enough ride shares in the
-                area for all our guests.
-              </p>
-            </div>
-            <div style={{ color: "#FFFFFF" }}>
-              <h3 style={{ fontSize: "2rem", marginBottom: "1rem" }}>Gifts</h3>
-              <p style={{ fontSize: "1rem" }}>
+              <p
+                className="reveal animate-delay-100"
+                style={{
+                  fontSize: "0.875rem",
+                  fontFamily: "var(--font-sans)",
+                  fontWeight: "300",
+                  color: "#777777",
+                  lineHeight: "1.7",
+                }}
+              >
                 Your presence at our wedding is truly the greatest gift. However
                 should you wish to honour us further, a wishing well will be
                 present on the evening.
               </p>
             </div>
+            <div style={{ color: "#1C1C1C" }}>
+              <img
+                src="/grapes.JPG"
+                alt="Children"
+                style={{
+                  width: "100%",
+                  height: "250px",
+                  objectFit: "cover",
+                  marginBottom: "1.5rem",
+                  borderRadius: "8px",
+                }}
+              />
+              <h3
+                className="reveal"
+                style={{
+                  fontSize: "1.5rem",
+                  marginBottom: "1rem",
+                  fontFamily: "var(--font-serif)",
+                  fontWeight: "400",
+                  letterSpacing: "-0.02em",
+                }}
+              >
+                children
+              </h3>
+              <p
+                className="reveal animate-delay-100"
+                style={{
+                  fontSize: "0.875rem",
+                  fontFamily: "var(--font-sans)",
+                  fontWeight: "300",
+                  color: "#777777",
+                  lineHeight: "1.7",
+                }}
+              >
+                This event is for family and friends who are 12 years and older.
+                We appreciate your understanding.
+              </p>
+            </div>
           </div>
         </div>
       </div>
+
+      {/* Dress Code Section */}
+      <div
+        style={{
+          backgroundImage: "url('/IMG_9189.JPG')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          width: "100vw",
+          height: "50vh",
+          minHeight: "400px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          position: "relative",
+        }}
+      >
+        {/* Overlay for better text readability */}
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: "rgba(0, 0, 0, 0.3)",
+            zIndex: 1,
+          }}
+        />
+
+        {/* Content overlay */}
+        <div
+          style={{
+            position: "relative",
+            zIndex: 2,
+            maxWidth: "600px",
+            width: "100%",
+            padding: "2rem",
+            textAlign: "center",
+          }}
+        >
+          <h3
+            className="reveal"
+            style={{
+              fontSize: "clamp(1.5rem, 3vw, 2.5rem)",
+              color: "#FFFFFF",
+              fontFamily: "var(--font-serif)",
+              fontWeight: "400",
+              letterSpacing: "-0.02em",
+              marginBottom: "1.5rem",
+              textShadow: "0 2px 4px rgba(0, 0, 0, 0.5)",
+            }}
+          >
+            Dress Code
+          </h3>
+          <p
+            className="reveal animate-delay-100"
+            style={{
+              fontSize: "1rem",
+              color: "#FFFFFF",
+              fontFamily: "var(--font-sans)",
+              fontWeight: "300",
+              lineHeight: "1.7",
+              textShadow: "0 2px 4px rgba(0, 0, 0, 0.5)",
+            }}
+          >
+            For Men: Black Suits, Tie / Bow Tie Optional
+            <br />
+            For Women: Full Length Dresses
+          </p>
+        </div>
+      </div>
+
       <div
         id="rsvp"
-        className="mx-8 md:mx-0 pb-16 min-h-screen bg-FCF9F7 flex flex-col items-center justify-center"
+        className="md:mx-0 pb-16 min-h-screen flex flex-col items-center justify-center"
+        style={{ backgroundColor: "#F5F5F2", padding: "8rem 2rem" }}
       >
         <div
-          className="pt-16 pb-4"
-          style={{ fontSize: "3rem", color: "#2B1105" }}
+          className="reveal"
+          style={{
+            fontSize: "clamp(2.5rem, 6vw, 4.5rem)",
+            color: "#1C1C1C",
+            fontFamily: "var(--font-serif)",
+            fontWeight: "400",
+            letterSpacing: "-0.02em",
+            marginBottom: "0.75rem",
+          }}
         >
-          RSVP
+          rsvp
         </div>
 
         {currentStep === "search" && (
           <>
             <div
+              className="reveal animate-delay-200"
               style={{
-                fontSize: "1rem",
-                color: "#2B1105",
+                fontSize: "0.875rem",
+                color: "#777777",
                 marginBottom: "2rem",
+                fontFamily: "var(--font-sans)",
+                letterSpacing: "0.05em",
+                textAlign: "center",
+                fontWeight: "300",
               }}
             >
-              Please RSVP by the 1st of December.
+              Please RSVP by the 1st of December
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700 font-bold mb-2">
+              <label
+                className="block mb-2"
+                style={{
+                  color: "#1C1C1C",
+                  fontFamily: "var(--font-sans)",
+                  fontSize: "0.875rem",
+                  letterSpacing: "0.05em",
+                  textTransform: "uppercase",
+                  fontWeight: "400",
+                }}
+              >
                 Full Name*
               </label>
               <Input
@@ -1171,21 +1440,21 @@ export default function Home() {
                 typeof searchName !== "string" ||
                 !searchName.trim()
               }
-              className="px-6 py-2 text-white font-semibold transition duration-150 ease-in-out shadow-md"
+              className="btn-primary"
               style={{
                 backgroundColor:
                   searchName &&
                   typeof searchName === "string" &&
                   searchName.trim()
-                    ? "#BFDACC"
+                    ? "#C9BCB0"
                     : "#E5E5E5",
                 color:
                   searchName &&
                   typeof searchName === "string" &&
                   searchName.trim()
-                    ? "#729A90"
+                    ? "#FFFFFF"
                     : "#999",
-                padding: "0.5rem 1.5rem",
+                padding: "1rem 2.5rem",
                 border: "none",
                 cursor:
                   searchName &&
@@ -1199,9 +1468,36 @@ export default function Home() {
                   searchName.trim()
                     ? 1
                     : 0.5,
+                fontFamily: "var(--font-sans)",
+                fontSize: "0.875rem",
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+                fontWeight: "400",
+                borderRadius: "50px",
+                transition: "all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1)",
+              }}
+              onMouseEnter={(e) => {
+                const target = e.target as HTMLElement;
+                if (
+                  searchName &&
+                  typeof searchName === "string" &&
+                  searchName.trim()
+                ) {
+                  target.style.backgroundColor = "#3E3E36";
+                }
+              }}
+              onMouseLeave={(e) => {
+                const target = e.target as HTMLElement;
+                if (
+                  searchName &&
+                  typeof searchName === "string" &&
+                  searchName.trim()
+                ) {
+                  target.style.backgroundColor = "#777777";
+                }
               }}
             >
-              Search
+              search
             </button>
           </>
         )}
@@ -1234,27 +1530,95 @@ export default function Home() {
 
             {/* Edit Prompt for Existing Submissions */}
             {showEditPrompt && (
-              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 mt-6">
-                <h3 className="text-lg font-semibold text-yellow-800 mb-4">
+              <div
+                className="p-6 mt-6"
+                style={{
+                  backgroundColor: "transparent",
+                }}
+              >
+                <h3
+                  className="mb-3 text-center"
+                  style={{
+                    fontSize: "1rem",
+                    fontFamily: "var(--font-sans)",
+                    fontWeight: "400",
+                    color: "#1C1C1C",
+                    letterSpacing: "0.02em",
+                  }}
+                >
                   You've already submitted an RSVP for this group.
                 </h3>
-                <p className="text-yellow-700 mb-4">
+                <p
+                  className="mb-4 text-center"
+                  style={{
+                    fontSize: "0.875rem",
+                    fontFamily: "var(--font-sans)",
+                    fontWeight: "300",
+                    color: "#777777",
+                  }}
+                >
                   Would you like to edit your previous response?
                 </p>
-                <div className="flex gap-4">
+                <div className="flex gap-4 justify-center">
                   <button
                     type="button"
                     onClick={() => handleEditResponse(true)}
-                    className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+                    className="btn-primary"
+                    style={{
+                      backgroundColor: "#C9BCB0",
+                      color: "#FFFFFF",
+                      padding: "1rem 2rem",
+                      border: "none",
+                      fontFamily: "var(--font-sans)",
+                      fontSize: "0.875rem",
+                      letterSpacing: "0.1em",
+                      textTransform: "uppercase",
+                      fontWeight: "400",
+                      borderRadius: "50px",
+                      cursor: "pointer",
+                      transition: "all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1)",
+                    }}
+                    onMouseEnter={(e) => {
+                      const target = e.target as HTMLElement;
+                      target.style.backgroundColor = "#3E3E36";
+                    }}
+                    onMouseLeave={(e) => {
+                      const target = e.target as HTMLElement;
+                      target.style.backgroundColor = "#C9BCB0";
+                    }}
                   >
-                    Yes, Edit My Response
+                    yes
                   </button>
                   <button
                     type="button"
                     onClick={() => handleEditResponse(false)}
-                    className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700"
+                    className="btn-secondary"
+                    style={{
+                      backgroundColor: "transparent",
+                      color: "#1C1C1C",
+                      padding: "1rem 2rem",
+                      border: "1px solid #1C1C1C",
+                      fontFamily: "var(--font-sans)",
+                      fontSize: "0.875rem",
+                      letterSpacing: "0.1em",
+                      textTransform: "uppercase",
+                      fontWeight: "400",
+                      borderRadius: "50px",
+                      cursor: "pointer",
+                      transition: "all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1)",
+                    }}
+                    onMouseEnter={(e) => {
+                      const target = e.target as HTMLElement;
+                      target.style.backgroundColor = "#1C1C1C";
+                      target.style.color = "#FFFFFF";
+                    }}
+                    onMouseLeave={(e) => {
+                      const target = e.target as HTMLElement;
+                      target.style.backgroundColor = "transparent";
+                      target.style.color = "#1C1C1C";
+                    }}
                   >
-                    No, Keep Original
+                    no
                   </button>
                 </div>
               </div>
@@ -1274,9 +1638,14 @@ export default function Home() {
           <form style={{ width: "100%", maxWidth: "600px", margin: "0 auto" }}>
             <div
               style={{
-                fontSize: "1rem",
-                color: "#2B1105",
+                fontSize: "0.875rem",
+                color: "#1C1C1C",
                 marginBottom: "2rem",
+                fontFamily: "var(--font-sans)",
+                letterSpacing: "0.05em",
+                textTransform: "uppercase",
+                fontWeight: "400",
+                textAlign: "center",
               }}
             >
               RSVP for {selectedGroup.group}
@@ -1300,13 +1669,43 @@ export default function Home() {
                       />
                       <button
                         onClick={handleSaveNameEdit}
-                        className="px-3 py-1 bg-green-600 text-white text-sm rounded hover:bg-green-700"
+                        className="px-3 py-1 text-white text-sm"
+                        style={{
+                          backgroundColor: "#C9BCB0",
+                          borderRadius: "50px",
+                          border: "none",
+                          cursor: "pointer",
+                          transition: "background-color 0.3s ease",
+                        }}
+                        onMouseEnter={(e) => {
+                          const target = e.target as HTMLElement;
+                          target.style.backgroundColor = "#3E3E36";
+                        }}
+                        onMouseLeave={(e) => {
+                          const target = e.target as HTMLElement;
+                          target.style.backgroundColor = "#C9BCB0";
+                        }}
                       >
                         Save
                       </button>
                       <button
                         onClick={handleCancelNameEdit}
-                        className="px-3 py-1 bg-gray-500 text-white text-sm rounded hover:bg-gray-600"
+                        className="px-3 py-1 text-white text-sm"
+                        style={{
+                          backgroundColor: "#777777",
+                          borderRadius: "50px",
+                          border: "none",
+                          cursor: "pointer",
+                          transition: "background-color 0.3s ease",
+                        }}
+                        onMouseEnter={(e) => {
+                          const target = e.target as HTMLElement;
+                          target.style.backgroundColor = "#1C1C1C";
+                        }}
+                        onMouseLeave={(e) => {
+                          const target = e.target as HTMLElement;
+                          target.style.backgroundColor = "#777777";
+                        }}
                       >
                         Cancel
                       </button>
@@ -1316,7 +1715,20 @@ export default function Home() {
                       <h4 className="font-semibold text-lg">{member.name}</h4>
                       <button
                         onClick={() => handleEditName(member.name)}
-                        className="text-green-700 text-sm underline hover:text-green-800"
+                        className="text-sm underline"
+                        style={{
+                          color: "#C9BCB0",
+                          fontFamily: "var(--font-sans)",
+                          transition: "color 0.3s ease",
+                        }}
+                        onMouseEnter={(e) => {
+                          const target = e.target as HTMLElement;
+                          target.style.color = "#3E3E36";
+                        }}
+                        onMouseLeave={(e) => {
+                          const target = e.target as HTMLElement;
+                          target.style.color = "#C9BCB0";
+                        }}
                       >
                         Edit spelling
                       </button>
@@ -1326,7 +1738,17 @@ export default function Home() {
 
                 {/* Attendance Status */}
                 <div className="mb-4">
-                  <span className="block text-gray-700 font-bold mb-2">
+                  <span
+                    className="block mb-2"
+                    style={{
+                      color: "#1C1C1C",
+                      fontFamily: "var(--font-sans)",
+                      fontSize: "0.875rem",
+                      letterSpacing: "0.05em",
+                      textTransform: "uppercase",
+                      fontWeight: "400",
+                    }}
+                  >
                     Attendance*
                   </span>
                   <div className="flex gap-4">
@@ -1364,7 +1786,17 @@ export default function Home() {
                 {/* Mobile Number (only if attending) */}
                 {attendanceStatus[member.name] === "attending" && (
                   <div className="mb-4">
-                    <label className="block text-gray-700 font-bold mb-2">
+                    <label
+                      className="block mb-2"
+                      style={{
+                        color: "#1C1C1C",
+                        fontFamily: "var(--font-sans)",
+                        fontSize: "0.875rem",
+                        letterSpacing: "0.05em",
+                        textTransform: "uppercase",
+                        fontWeight: "400",
+                      }}
+                    >
                       Mobile Number
                     </label>
                     <Input
@@ -1382,7 +1814,17 @@ export default function Home() {
                 {/* Dietary Requirements (only if attending) */}
                 {attendanceStatus[member.name] === "attending" && (
                   <div className="mb-4">
-                    <label className="block text-gray-700 font-bold mb-2">
+                    <label
+                      className="block mb-2"
+                      style={{
+                        color: "#1C1C1C",
+                        fontFamily: "var(--font-sans)",
+                        fontSize: "0.875rem",
+                        letterSpacing: "0.05em",
+                        textTransform: "uppercase",
+                        fontWeight: "400",
+                      }}
+                    >
                       Dietary Requirements* (select all that apply)
                     </label>
                     <div className="space-y-2">
@@ -1438,21 +1880,40 @@ export default function Home() {
                 type="submit"
                 onClick={submitForm}
                 disabled={showEditPrompt || !isFormValid()}
-                className="px-6 py-2 text-white font-semibold transition duration-150 ease-in-out shadow-md"
+                className="btn-primary"
                 style={{
                   backgroundColor:
-                    showEditPrompt || !isFormValid() ? "#E5E5E5" : "#BFDACC",
-                  color: showEditPrompt || !isFormValid() ? "#999" : "#729A90",
-                  padding: "0.5rem 1.5rem",
+                    showEditPrompt || !isFormValid() ? "#E5E5E5" : "#777777",
+                  color: showEditPrompt || !isFormValid() ? "#999" : "#FFFFFF",
+                  padding: "1rem 2.5rem",
                   border: "none",
                   cursor:
                     showEditPrompt || !isFormValid()
                       ? "not-allowed"
                       : "pointer",
                   opacity: showEditPrompt || !isFormValid() ? 0.5 : 1,
+                  fontFamily: "var(--font-sans)",
+                  fontSize: "0.875rem",
+                  letterSpacing: "0.1em",
+                  textTransform: "uppercase",
+                  fontWeight: "400",
+                  borderRadius: "50px",
+                  transition: "all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1)",
+                }}
+                onMouseEnter={(e) => {
+                  const target = e.target as HTMLElement;
+                  if (!showEditPrompt && isFormValid()) {
+                    target.style.backgroundColor = "#3E3E36";
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  const target = e.target as HTMLElement;
+                  if (!showEditPrompt && isFormValid()) {
+                    target.style.backgroundColor = "#777777";
+                  }
                 }}
               >
-                {existingSubmission ? "Edit RSVP" : "Submit RSVP"}
+                {existingSubmission ? "edit rsvp" : "submit rsvp"}
               </button>
 
               {!showEditPrompt && !isFormValid() && (
@@ -1478,30 +1939,71 @@ export default function Home() {
 
         {currentStep === "complete" && (
           <div className="text-center">
-            <p className="text-green-700 text-lg mb-4">
+            <p
+              className="text-lg mb-4"
+              style={{
+                color: "#1C1C1C",
+                fontFamily: "var(--font-sans)",
+                fontWeight: "300",
+              }}
+            >
               Thank you for your RSVP! We look forward to seeing you on our
               special day.
             </p>
             <button
               onClick={resetForm}
-              className="px-6 py-2 text-white font-semibold transition duration-150 ease-in-out shadow-md"
+              className="btn-primary"
               style={{
-                backgroundColor: "#BFDACC",
-                color: "#729A90",
-                padding: "0.5rem 1.5rem",
+                backgroundColor: "#C9BCB0",
+                color: "#FFFFFF",
+                padding: "1rem 2.5rem",
                 border: "none",
+                fontFamily: "var(--font-sans)",
+                fontSize: "0.875rem",
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+                fontWeight: "400",
+                borderRadius: "50px",
+                cursor: "pointer",
+                transition: "all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1)",
+              }}
+              onMouseEnter={(e) => {
+                const target = e.target as HTMLElement;
+                target.style.backgroundColor = "#3E3E36";
+              }}
+              onMouseLeave={(e) => {
+                const target = e.target as HTMLElement;
+                target.style.backgroundColor = "#C9BCB0";
               }}
             >
-              Submit Another RSVP
+              submit another rsvp
             </button>
           </div>
         )}
 
         {error && (
-          <div className="mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
-            {typeof error === "string"
-              ? error
-              : `Error: ${JSON.stringify(error)}`}
+          <div
+            className="mt-4 p-4"
+            style={{
+              backgroundColor: "#F5F5F2",
+              border: "1px solid #C9BCB0",
+              borderRadius: "20px",
+              textAlign: "center",
+            }}
+          >
+            <p
+              style={{
+                color: "#1C1C1C",
+                fontFamily: "var(--font-sans)",
+                fontSize: "0.875rem",
+                fontWeight: "300",
+                lineHeight: "1.6",
+              }}
+            >
+              {typeof error === "string"
+                ? error
+                : `Error: ${JSON.stringify(error)}`}
+            </p>
           </div>
         )}
       </div>

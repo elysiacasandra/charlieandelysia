@@ -2,19 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-  --font-adelia: "Adelia", cursive;
-}
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap");
 
-@font-face {
-  font-family: "Abhaya Libre";
-  src: url("/fonts/abhaya-libre-regular.woff2") format("woff2"),
-    url("/fonts/abhaya-libre-regular.woff") format("woff");
-  font-weight: normal;
-  font-style: normal;
+:root {
+  /* Editorial Color Palette */
+  --color-white: #ffffff;
+  --color-soft-gray: #f5f5f2;
+  --color-charcoal: #1c1c1c;
+  --color-mid-gray: #777777;
+  --color-nude-grey: #c9bcb0;
+  --color-dark-olive: #3e3e36;
+
+  /* Typography */
+  --font-serif: "Playfair Display", serif;
+  --font-sans: "Inter", sans-serif;
 }
 
 @font-face {
@@ -26,13 +27,183 @@
 }
 
 body {
-  font-family: "Abhaya Libre", sans-serif;
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  font-family: var(--font-sans);
+  color: var(--color-charcoal);
+  background: var(--color-white);
   overflow-x: hidden;
+  font-weight: 300;
+  line-height: 1.7;
+  letter-spacing: 0.02em;
+}
+
+/* Typography Hierarchy */
+h1,
+h2,
+h3 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+
+/* Smooth Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeInUp 1s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+}
+
+.animate-delay-100 {
+  animation-delay: 100ms;
+}
+
+.animate-delay-200 {
+  animation-delay: 200ms;
+}
+
+.animate-delay-300 {
+  animation-delay: 300ms;
+}
+
+.animate-delay-400 {
+  animation-delay: 400ms;
+}
+
+/* Scroll Reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 1s cubic-bezier(0.25, 0.1, 0.25, 1),
+    transform 1s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.reveal.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Interactive Elements */
+.btn-primary {
+  background-color: var(--color-nude-grey);
+  color: var(--color-white);
+  padding: 1rem 2.5rem;
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 0.875rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+  border-radius: 50px;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-dark-olive);
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--color-charcoal);
+  padding: 1rem 2.5rem;
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 0.875rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: 1px solid var(--color-charcoal);
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+  border-radius: 50px;
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-charcoal);
+  color: var(--color-white);
+}
+
+/* Link Styles */
+a {
+  color: var(--color-charcoal);
+  text-decoration: none;
+  position: relative;
+  transition: color 0.4s ease;
+}
+
+a:hover {
+  color: var(--color-mid-gray);
+}
+
+a::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background-color: var(--color-muted-gold);
+  transition: width 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+a:hover::after {
+  width: 100%;
+}
+
+/* Form Elements */
+input[type="text"],
+input[type="tel"],
+input[type="email"],
+select,
+textarea {
+  font-family: var(--font-sans);
+  font-weight: 300;
+  color: var(--color-charcoal);
+  background-color: var(--color-white);
+  border: 1px solid #e5e5e5;
+  padding: 0.875rem 1rem;
+  transition: border-color 0.3s ease;
+  border-radius: 8px; /* Rounded edges like buttons */
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--color-muted-gold);
+}
+
+/* Checkbox and Radio Styles */
+input[type="checkbox"],
+input[type="radio"] {
+  accent-color: #1c1c1c;
+}
+
+/* Parallax Container */
+.parallax-container {
+  overflow: hidden;
+}
+
+.parallax-image {
+  will-change: transform;
+  transition: transform 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+/* Generous Spacing */
+.section-padding {
+  padding: 8rem 0;
+}
+
+@media (max-width: 768px) {
+  .section-padding {
+    padding: 4rem 0;
+  }
 }
