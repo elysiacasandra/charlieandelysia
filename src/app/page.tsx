@@ -710,7 +710,7 @@ export default function Home() {
                 lineHeight: "1",
               }}
             >
-              charlie & elysia
+              Charlie & Elysia
             </div>
             <div
               className="animate-fade-in animate-delay-200"
@@ -768,7 +768,7 @@ export default function Home() {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          padding: "3rem 1rem",
+          padding: "1rem 1rem",
         }}
       >
         <div
@@ -783,7 +783,7 @@ export default function Home() {
             marginBottom: "1.5rem",
           }}
         >
-          itinerary
+          Itinerary
         </div>
         <div
           style={{
@@ -813,25 +813,164 @@ export default function Home() {
             1 sunnyside rd, mount eliza, vic
           </p>
         </div>
+        {/* Desktop Layout - Horizontal */}
+        <div className="hidden lg:flex">
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "flex-start",
+              gap: "4rem",
+              marginTop: "2rem",
+              maxWidth: "1000px",
+              margin: "2rem auto 0",
+              padding: "0 2rem",
+            }}
+          >
+            {/* 4pm Ceremony */}
+            <div style={{ textAlign: "center", maxWidth: "280px" }}>
+              <div
+                className="reveal"
+                style={{
+                  fontSize: "1.25rem",
+                  color: "#3E5C3C",
+                  fontFamily: "var(--font-sans)",
+                  letterSpacing: "0.1em",
+                  textTransform: "uppercase",
+                  marginBottom: "1rem",
+                }}
+              >
+                4pm
+              </div>
+              <div
+                className="reveal animate-delay-100"
+                style={{
+                  fontSize: "1.5rem",
+                  color: "#1C1C1C",
+                  fontFamily: "var(--font-sans)",
+                  fontWeight: "300",
+                  marginBottom: "0.75rem",
+                }}
+              >
+                Ceremony
+              </div>
+              <div
+                className="reveal animate-delay-200"
+                style={{
+                  fontSize: "0.875rem",
+                  color: "#777777",
+                  fontFamily: "var(--font-sans)",
+                  fontWeight: "300",
+                  lineHeight: "1.6",
+                }}
+              >
+                Please arrive at 3:45pm.
+              </div>
+            </div>
+
+            {/* 5pm Meze & Drinks */}
+            <div style={{ textAlign: "center", maxWidth: "280px" }}>
+              <div
+                className="reveal"
+                style={{
+                  fontSize: "1.25rem",
+                  color: "#3E5C3C",
+                  fontFamily: "var(--font-sans)",
+                  letterSpacing: "0.1em",
+                  textTransform: "uppercase",
+                  marginBottom: "1rem",
+                }}
+              >
+                5pm
+              </div>
+              <div
+                className="reveal animate-delay-100"
+                style={{
+                  fontSize: "1.5rem",
+                  color: "#1C1C1C",
+                  fontFamily: "var(--font-sans)",
+                  fontWeight: "300",
+                  marginBottom: "0.75rem",
+                }}
+              >
+                Meze & Drinks
+              </div>
+              <div
+                className="reveal animate-delay-200"
+                style={{
+                  fontSize: "0.875rem",
+                  color: "#777777",
+                  fontFamily: "var(--font-sans)",
+                  fontWeight: "300",
+                  lineHeight: "1.6",
+                }}
+              >
+                Cocktails and canapés
+              </div>
+            </div>
+
+            {/* 7pm Reception */}
+            <div style={{ textAlign: "center", maxWidth: "280px" }}>
+              <div
+                className="reveal"
+                style={{
+                  fontSize: "1.25rem",
+                  color: "#3E5C3C",
+                  fontFamily: "var(--font-sans)",
+                  letterSpacing: "0.1em",
+                  textTransform: "uppercase",
+                  marginBottom: "1rem",
+                }}
+              >
+                7pm
+              </div>
+              <div
+                className="reveal animate-delay-100"
+                style={{
+                  fontSize: "1.5rem",
+                  color: "#1C1C1C",
+                  fontFamily: "var(--font-sans)",
+                  fontWeight: "300",
+                  marginBottom: "0.75rem",
+                }}
+              >
+                Reception
+              </div>
+              <div
+                className="reveal animate-delay-200"
+                style={{
+                  fontSize: "0.875rem",
+                  color: "#777777",
+                  fontFamily: "var(--font-sans)",
+                  fontWeight: "300",
+                  lineHeight: "1.6",
+                }}
+              >
+                Concluding at midnight.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile Layout - Vertical */}
         <div
-          className="px-6"
+          className="flex flex-col lg:hidden px-6"
           style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "2.5rem",
+            gap: "1.5rem",
             marginTop: "2rem",
           }}
         >
-          <div>
+          {/* 4pm Ceremony */}
+          <div style={{ textAlign: "center", maxWidth: "280px" }}>
             <div
               className="reveal"
               style={{
-                fontSize: "0.875rem",
+                fontSize: "1.25rem",
                 color: "#3E5C3C",
                 fontFamily: "var(--font-sans)",
                 letterSpacing: "0.1em",
                 textTransform: "uppercase",
-                marginBottom: "0.75rem",
+                marginBottom: "1rem",
               }}
             >
               4pm
@@ -839,11 +978,11 @@ export default function Home() {
             <div
               className="reveal animate-delay-100"
               style={{
-                fontSize: "1.75rem",
+                fontSize: "1.5rem",
                 color: "#1C1C1C",
                 fontFamily: "var(--font-sans)",
                 fontWeight: "300",
-                marginBottom: "1rem",
+                marginBottom: "0.75rem",
               }}
             >
               Ceremony
@@ -851,26 +990,28 @@ export default function Home() {
             <div
               className="reveal animate-delay-200"
               style={{
-                fontSize: "1rem",
+                fontSize: "0.875rem",
                 color: "#777777",
                 fontFamily: "var(--font-sans)",
                 fontWeight: "300",
-                lineHeight: "1.7",
+                lineHeight: "1.6",
               }}
             >
               Please arrive at 3:45pm.
             </div>
           </div>
-          <div>
+
+          {/* 5pm Meze & Drinks */}
+          <div style={{ textAlign: "center", maxWidth: "280px" }}>
             <div
               className="reveal"
               style={{
-                fontSize: "0.875rem",
+                fontSize: "1.25rem",
                 color: "#3E5C3C",
                 fontFamily: "var(--font-sans)",
                 letterSpacing: "0.1em",
                 textTransform: "uppercase",
-                marginBottom: "0.75rem",
+                marginBottom: "1rem",
               }}
             >
               5pm
@@ -878,26 +1019,40 @@ export default function Home() {
             <div
               className="reveal animate-delay-100"
               style={{
-                fontSize: "1.75rem",
+                fontSize: "1.5rem",
                 color: "#1C1C1C",
                 fontFamily: "var(--font-sans)",
                 fontWeight: "300",
-                marginBottom: "1rem",
+                marginBottom: "0.75rem",
               }}
             >
               Meze & Drinks
             </div>
+            <div
+              className="reveal animate-delay-200"
+              style={{
+                fontSize: "0.875rem",
+                color: "#777777",
+                fontFamily: "var(--font-sans)",
+                fontWeight: "300",
+                lineHeight: "1.6",
+              }}
+            >
+              Cocktails and canapés
+            </div>
           </div>
-          <div>
+
+          {/* 7pm Reception */}
+          <div style={{ textAlign: "center", maxWidth: "280px" }}>
             <div
               className="reveal"
               style={{
-                fontSize: "0.875rem",
+                fontSize: "1.25rem",
                 color: "#3E5C3C",
                 fontFamily: "var(--font-sans)",
                 letterSpacing: "0.1em",
                 textTransform: "uppercase",
-                marginBottom: "0.75rem",
+                marginBottom: "1rem",
               }}
             >
               7pm
@@ -905,11 +1060,11 @@ export default function Home() {
             <div
               className="reveal animate-delay-100"
               style={{
-                fontSize: "1.75rem",
+                fontSize: "1.5rem",
                 color: "#1C1C1C",
                 fontFamily: "var(--font-sans)",
                 fontWeight: "300",
-                marginBottom: "1rem",
+                marginBottom: "0.75rem",
               }}
             >
               Reception
@@ -917,11 +1072,11 @@ export default function Home() {
             <div
               className="reveal animate-delay-200"
               style={{
-                fontSize: "1rem",
+                fontSize: "0.875rem",
                 color: "#777777",
                 fontFamily: "var(--font-sans)",
                 fontWeight: "300",
-                lineHeight: "1.7",
+                lineHeight: "1.6",
               }}
             >
               Concluding at midnight.
@@ -968,7 +1123,7 @@ export default function Home() {
                   letterSpacing: "-0.02em",
                 }}
               >
-                accomodation
+                Accomodation
               </h3>
               <p
                 className="text-center reveal animate-delay-100"
@@ -981,8 +1136,9 @@ export default function Home() {
                 }}
               >
                 Sunnyside Estate is less than an hours drive from Melbourne.
-                Should you chose to book a hotel nearby for the wedding night,
-                we have been recommended Brooklands Hotel in Mornington.
+                Should you chose to book accomodation nearby for the wedding
+                night, there are a number of hotels and airbnbs in the area. We
+                have been recommended Brooklands Hotel in Mornington.
               </p>
             </div>
           </div>
@@ -1012,7 +1168,7 @@ export default function Home() {
                   letterSpacing: "-0.02em",
                 }}
               >
-                parking & transport
+                Transport
               </h3>
               <p
                 className="text-center reveal animate-delay-100"
@@ -1058,7 +1214,7 @@ export default function Home() {
                   letterSpacing: "-0.02em",
                 }}
               >
-                gifts
+                Gifts
               </h3>
               <p
                 className="text-center reveal animate-delay-100"
@@ -1102,7 +1258,7 @@ export default function Home() {
                   letterSpacing: "-0.02em",
                 }}
               >
-                children
+                Guests
               </h3>
               <p
                 className="text-center reveal animate-delay-100"
@@ -1114,8 +1270,9 @@ export default function Home() {
                   lineHeight: "1.7",
                 }}
               >
-                This event is for family and friends who are 12 years and older.
-                We appreciate your understanding.
+                We kindly request that only those listed in the RSVP group join
+                us in celebrating. This event is adult only unless your children
+                are directly invited.
               </p>
             </div>
           </div>
@@ -1165,7 +1322,7 @@ export default function Home() {
                   letterSpacing: "-0.02em",
                 }}
               >
-                accomodation
+                Accomodation
               </h3>
               <p
                 className="reveal animate-delay-100"
@@ -1178,8 +1335,9 @@ export default function Home() {
                 }}
               >
                 Sunnyside Estate is less than an hours drive from Melbourne.
-                Should you chose to book a hotel nearby for the wedding night,
-                we have been recommended Brooklands Hotel in Mornington.
+                Should you chose to book accomodation nearby for the wedding
+                night, there are a number of hotels and airbnbs in the area. We
+                have been recommended Brooklands Hotel in Mornington.
               </p>
             </div>
             <div style={{ color: "#1C1C1C" }}>
@@ -1204,7 +1362,7 @@ export default function Home() {
                   letterSpacing: "-0.02em",
                 }}
               >
-                parking & transport
+                Transport
               </h3>
               <p
                 className="reveal animate-delay-100"
@@ -1245,7 +1403,7 @@ export default function Home() {
                   letterSpacing: "-0.02em",
                 }}
               >
-                gifts
+                Gifts
               </h3>
               <p
                 className="reveal animate-delay-100"
@@ -1284,7 +1442,7 @@ export default function Home() {
                   letterSpacing: "-0.02em",
                 }}
               >
-                children
+                Guests
               </h3>
               <p
                 className="reveal animate-delay-100"
@@ -1296,8 +1454,9 @@ export default function Home() {
                   lineHeight: "1.7",
                 }}
               >
-                This event is for family and friends who are 12 years and older.
-                We appreciate your understanding.
+                We kindly request that only those listed in the RSVP group join
+                us in celebrating. This event is adult only unless your children
+                are directly invited.
               </p>
             </div>
           </div>
@@ -1392,7 +1551,7 @@ export default function Home() {
             marginBottom: "0.75rem",
           }}
         >
-          rsvp
+          RSVP
         </div>
 
         {currentStep === "search" && (
@@ -1409,7 +1568,7 @@ export default function Home() {
                 fontWeight: "300",
               }}
             >
-              Please RSVP by the 1st of December
+              Please RSVP by the 1st of December.
             </div>
             <div className="mb-4">
               <label
@@ -1644,7 +1803,7 @@ export default function Home() {
                 fontFamily: "var(--font-sans)",
                 letterSpacing: "0.05em",
                 textTransform: "uppercase",
-                fontWeight: "400",
+                fontWeight: "300",
                 textAlign: "center",
               }}
             >
@@ -1712,7 +1871,15 @@ export default function Home() {
                     </div>
                   ) : (
                     <>
-                      <h4 className="font-semibold text-lg">{member.name}</h4>
+                      <h4
+                        className="text-lg"
+                        style={{
+                          fontFamily: "var(--font-sans)",
+                          fontWeight: "300",
+                        }}
+                      >
+                        {member.name}
+                      </h4>
                       <button
                         onClick={() => handleEditName(member.name)}
                         className="text-sm underline"
