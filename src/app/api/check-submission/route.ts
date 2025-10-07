@@ -5,11 +5,11 @@ const SPREADSHEET_ID = "1zJGegkqKJn6ujXkBI136ewnmK6D8bemIdnhe2xQEpn0";
 const CSV_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/export?format=csv&gid=0`;
 
 export async function GET(request: NextRequest) {
-  try {
-    const { searchParams } = new URL(request.url);
-    const groupId = searchParams.get("groupId");
-    const personName = searchParams.get("personName");
+  const { searchParams } = new URL(request.url);
+  const groupId = searchParams.get("groupId");
+  const personName = searchParams.get("personName");
 
+  try {
     if (!groupId) {
       return NextResponse.json(
         {
@@ -125,7 +125,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       success: true,
       hasExistingSubmission: false,
-      groupId: parseInt(groupId),
+      groupId: groupId ? parseInt(groupId) : 0,
       note: "Error checking submissions - allowing new submission",
     });
   }
