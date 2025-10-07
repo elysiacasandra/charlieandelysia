@@ -1677,7 +1677,12 @@ export default function Home() {
               className="p-4 border-2 border-gray-300 rounded cursor-pointer hover:border-gray-400 transition-colors"
               style={{ backgroundColor: "#F5F5F0" }}
             >
-              <h3 className="font-semibold text-lg mb-2">{foundGroup.group}</h3>
+              <h3
+                style={{ fontFamily: "var(--font-sans)", fontWeight: "500" }}
+                className="text-lg mb-2"
+              >
+                {foundGroup.group}
+              </h3>
               <div className="space-y-1">
                 {foundGroup.members.map((member: any, index: number) => (
                   <div key={index} className="text-gray-700">
