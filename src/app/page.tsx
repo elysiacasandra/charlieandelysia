@@ -2033,16 +2033,18 @@ export default function Home() {
                     {(dietaryRequirements[member.name] || []).includes(
                       "Other"
                     ) && (
-                      <Input
-                        className="mt-2 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        type="text"
-                        onChange={(value) =>
-                          handleCustomDietaryChange(member.name, value)
-                        }
-                        value={customDietary[member.name] || ""}
-                        placeholder="Please specify dietary requirements"
-                        required
-                      />
+                      <div className="mt-2">
+                        <Input
+                          className="mt-8 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                          type="text"
+                          onChange={(value) =>
+                            handleCustomDietaryChange(member.name, value)
+                          }
+                          value={customDietary[member.name] || ""}
+                          placeholder="Please specify dietary requirements"
+                          required
+                        />
+                      </div>
                     )}
                   </div>
                 )}
