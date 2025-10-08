@@ -1999,7 +1999,7 @@ export default function Home() {
                     >
                       Dietary Requirements* (select all that apply)
                     </label>
-                    <div className="space-y-2">
+                    <div className="grid grid-cols-2 gap-2">
                       {dietaryOptions.map((option) => (
                         <label key={option} className="flex items-center">
                           <input
@@ -2023,7 +2023,9 @@ export default function Home() {
                               }));
                             }}
                           />
-                          <span className="ml-2 text-gray-700">{option}</span>
+                          <span className="ml-2 text-gray-700 text-sm">
+                            {option}
+                          </span>
                         </label>
                       ))}
                     </div>
