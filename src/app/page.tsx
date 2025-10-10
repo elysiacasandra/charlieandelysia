@@ -225,10 +225,10 @@ export default function Home() {
     },
     {
       id: 27,
-      group: "Peter Robinson & Joanne Furguson",
+      group: "Peter Robinson & Joanne Ferguson",
       members: [
         { name: "Peter Robinson", mobile: "" },
-        { name: "Joanne Furgerson", mobile: "" },
+        { name: "Joanne Ferguson", mobile: "" },
       ],
     },
     {
@@ -1135,8 +1135,8 @@ export default function Home() {
                   lineHeight: "1.7",
                 }}
               >
-                Sunnyside Estate is less than an hours drive from Melbourne.
-                Should you chose to book accomodation nearby for the wedding
+                Sunnyside Estate is less than an hour's drive from Melbourne.
+                Should you choose to book accommodation nearby for the wedding
                 night, there are a number of hotels and airbnbs in the area. We
                 have been recommended Brooklands Hotel in Mornington.
               </p>
@@ -1334,8 +1334,8 @@ export default function Home() {
                   lineHeight: "1.7",
                 }}
               >
-                Sunnyside Estate is less than an hours drive from Melbourne.
-                Should you chose to book accomodation nearby for the wedding
+                Sunnyside Estate is less than an hour's drive from Melbourne.
+                Should you choose to book accommodation nearby for the wedding
                 night, there are a number of hotels and airbnbs in the area. We
                 have been recommended Brooklands Hotel in Mornington.
               </p>
