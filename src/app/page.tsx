@@ -1271,8 +1271,8 @@ export default function Home() {
                 }}
               >
                 We kindly request that only those listed in the RSVP group join
-                us in celebrating. This event is adult only unless your children
-                are directly invited.
+                us in celebrating. This event is for people who are 12+ years
+                old unless your children are directly invited.
               </p>
             </div>
           </div>
@@ -1455,8 +1455,8 @@ export default function Home() {
                 }}
               >
                 We kindly request that only those listed in the RSVP group join
-                us in celebrating. This event is adult only unless your children
-                are directly invited.
+                us in celebrating. This event is for people who are 12+ years
+                old unless your children are directly invited.
               </p>
             </div>
           </div>
@@ -1652,7 +1652,7 @@ export default function Home() {
                   typeof searchName === "string" &&
                   searchName.trim()
                 ) {
-                  target.style.backgroundColor = "#777777";
+                  target.style.backgroundColor = "#C9BCB0";
                 }
               }}
             >
@@ -2059,7 +2059,7 @@ export default function Home() {
                 className="btn-primary"
                 style={{
                   backgroundColor:
-                    showEditPrompt || !isFormValid() ? "#E5E5E5" : "#777777",
+                    showEditPrompt || !isFormValid() ? "#E5E5E5" : "#C9BCB0",
                   color: showEditPrompt || !isFormValid() ? "#999" : "#FFFFFF",
                   padding: "1rem 2.5rem",
                   border: "none",
@@ -2085,7 +2085,7 @@ export default function Home() {
                 onMouseLeave={(e) => {
                   const target = e.target as HTMLElement;
                   if (!showEditPrompt && isFormValid()) {
-                    target.style.backgroundColor = "#777777";
+                    target.style.backgroundColor = "#C9BCB0";
                   }
                 }}
               >
