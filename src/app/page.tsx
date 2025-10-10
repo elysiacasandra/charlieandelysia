@@ -1528,7 +1528,7 @@ export default function Home() {
               textShadow: "0 2px 4px rgba(0, 0, 0, 0.5)",
             }}
           >
-            For Men: Black Suits, Tie / Bow Tie Optional
+            For Men: Black Suits, Tie / Bow Tie Preferred
             <br />
             For Women: Full Length Dresses
           </p>
