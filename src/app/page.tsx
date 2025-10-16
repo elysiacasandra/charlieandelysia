@@ -1528,9 +1528,11 @@ export default function Home() {
               textShadow: "0 2px 4px rgba(0, 0, 0, 0.5)",
             }}
           >
+            Dress Code: Black Tie Optional
+            <br />
             For Men: Black Suits, Tie / Bow Tie Preferred
             <br />
-            For Women: Full Length Dresses
+            For Women: Floor-length Gowns - No White
           </p>
         </div>
       </div>
