@@ -1180,11 +1180,11 @@ export default function Home() {
                   lineHeight: "1.7",
                 }}
               >
-                There is free parking in the estate. Please park your car
-                outside the estate, on Sunnyside Rd, if you plan to leave it
-                overnight. If you choose to rideshare, we encourage you to book
-                ahead of time so that there are enough vehicles in the area for
-                all our guests.
+                There is free parking in and outside the estate. Please park
+                your car outside the estate, on Sunnyside Rd, if you plan to
+                leave it overnight. If you choose to rideshare, we encourage you
+                to book ahead of time so that there are enough vehicles in the
+                area for all our guests.
               </p>
             </div>
           </div>
@@ -1374,11 +1374,11 @@ export default function Home() {
                   lineHeight: "1.7",
                 }}
               >
-                There is free parking in the estate. Please park your car
-                outside the estate, on Sunnyside Rd, if you plan to leave it
-                overnight. If you choose to rideshare, we encourage you to book
-                ahead of time so that there are enough vehicles in the area for
-                all our guests.
+                There is free parking in and outside the estate. Please park
+                your car outside the estate, on Sunnyside Rd, if you plan to
+                leave it overnight. If you choose to rideshare, we encourage you
+                to book ahead of time so that there are enough vehicles in the
+                area for all our guests.
               </p>
             </div>
             <div style={{ color: "#1C1C1C" }}>
