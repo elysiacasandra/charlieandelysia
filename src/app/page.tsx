@@ -864,7 +864,7 @@ export default function Home() {
                   lineHeight: "1.6",
                 }}
               >
-                Please arrive at 3:45pm.
+                Please arrive between 3:30-3:45pm.
               </div>
             </div>
 
@@ -997,7 +997,7 @@ export default function Home() {
                 lineHeight: "1.6",
               }}
             >
-              Please arrive at 3:45pm.
+              Please arrive between 3:30-3:45pm.
             </div>
           </div>
 
@@ -1528,11 +1528,11 @@ export default function Home() {
               textShadow: "0 2px 4px rgba(0, 0, 0, 0.5)",
             }}
           >
-            Dress Code: Black Tie Optional
+            Black Tie Optional
             <br />
             For Men: Black Suits, Tie / Bow Tie Preferred
             <br />
-            For Women: Floor-length Gowns - No White
+            For Women: Full or Floor-Length Gowns - No White
           </p>
         </div>
       </div>
@@ -1570,7 +1570,7 @@ export default function Home() {
                 fontWeight: "300",
               }}
             >
-              Please RSVP by the 1st of December.
+              Please RSVP before the 1st of December.
             </div>
             <div className="mb-4">
               <label
