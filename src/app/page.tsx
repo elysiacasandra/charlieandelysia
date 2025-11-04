@@ -893,7 +893,7 @@ export default function Home() {
                   marginBottom: "0.75rem",
                 }}
               >
-                Meze & Drinks
+                Aperitivo
               </div>
               <div
                 className="reveal animate-delay-200"
@@ -905,7 +905,7 @@ export default function Home() {
                   lineHeight: "1.6",
                 }}
               >
-                Canapés and an open bar.
+                Meze and flowing drinks.
               </div>
             </div>
 
@@ -1026,7 +1026,7 @@ export default function Home() {
                 marginBottom: "0.75rem",
               }}
             >
-              Meze & Drinks
+              Aperitivo
             </div>
             <div
               className="reveal animate-delay-200"
@@ -1038,7 +1038,7 @@ export default function Home() {
                 lineHeight: "1.6",
               }}
             >
-              Canapés and an open bar.
+              Meze and flowing drinks.
             </div>
           </div>
 
